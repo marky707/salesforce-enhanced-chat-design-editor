@@ -10,7 +10,7 @@ One ICM pipeline. A draft Solution Design Document (SDD) enters at intake, is cr
 | `02_editor-review/` | Critic-only readiness review | Validated package (+ prior review and response log on later rounds) | Review report: verdict + ≤5 findings | Revise / Insufficient Context → `03` · Ready → `05` |
 | `03_author-revision/` | **HUMAN STOP** — author resolves findings | Current design + review packet | Revised SDD + response log | Author deliberately submits to `04` |
 | `04_revision-intake/` | Validate resubmission completeness and traceability | Revised SDD + response log | Revision-intake manifest (or errors report) | Complete → `02` (round +1) · Incomplete → `03` |
-| `05_formal-review/` | **HUMAN STOP** — accountable architect records decision | Ready package + review history | Human-authored decision record | Approved → `06` · Changes Required → `03` |
+| `05_formal-review/` | **HUMAN STOP** — accountable architect records decision | Layered ready packet: cover sheet + current material, history in `history/` | Human-authored decision record | Approved → `06` · Changes Required → `03` |
 | `06_completed/` | Preserve the approved package | Approved design + decision record | Completion manifest | Terminal, read-only |
 
 A stage never performs the next stage's job. Read only the current stage's `CONTEXT.md` and the files it routes to.
