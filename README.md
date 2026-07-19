@@ -15,6 +15,7 @@ The editor packages senior architecture judgment as a **critic, not a co-author*
 ## What you need
 
 - An AI coding agent (Codex or Claude Code) opened in this repository — the agent runs the workflow; you never move packages between stages yourself.
+- **No coding agent? You can still use the editor today:** upload the `02_editor-review/` bundle to a Claude Project and paste your draft — see Option B below. The repository workflow (ledger, rounds, formal approval) needs an agent; the critique itself doesn't.
 - **Python 3, only if you'll submit Word documents** — the `.docx` converter uses the Python standard library, so there's nothing to install beyond Python itself (already present on macOS and Linux; one-time install on Windows). No Python? Export your document as PDF, markdown, or plain text instead — intake accepts all three as-is.
 
 ## Quick start
