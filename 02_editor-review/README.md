@@ -23,7 +23,9 @@ A critic-only design review editor for **Salesforce Enhanced Chat v1** (formerly
 
 A missing piece won't block the review — its absence becomes a finding.
 
-## Standalone use — Claude Project (no repository needed)
+## Standalone use — Claude Project or any capable assistant (no repository needed)
+
+The editor is five plain markdown files — any assistant that can hold them as context works: a Claude Project, a ChatGPT Project or Custom GPT, a Gemini Gem, or a coding agent pointed at this folder. Claude Project steps shown; the pattern is identical elsewhere (upload the same files as knowledge, set the same instructions).
 
 1. Create a Claude Project and upload: `identity.md`, `rules.md`, `examples.md`, and every file in `reference/`. **Do not upload** `CONTEXT.md` or the `input/`/`output/` folders — those are pipeline-only.
 2. Set the Project instructions to: *"You are the design review editor defined in identity.md. Obey rules.md completely. Review submitted Salesforce Enhanced Chat v1 / Omni-Channel solution designs using the output contract in rules.md."*
