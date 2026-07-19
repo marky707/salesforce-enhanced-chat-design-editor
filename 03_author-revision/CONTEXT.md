@@ -21,7 +21,7 @@ This output folder is the author's retained working/archive location. The author
 
 ## Routing
 
-**No automatic exit.** When finished, the author copies **every changed submission artifact**—revised SDD, completed response log, and any new/versioned supporting artifact—into `04_revision-intake/input/<ID>/`. Run `python3 tools/review_state.py preflight revision <ID>` before invoking `submit revision <ID>`. File presence is detected evidence; the invocation is the deliberate human submission event recorded in the ledger.
+**No automatic exit.** When finished, the author copies **every changed submission artifact**—revised SDD, completed response log, and any new/versioned supporting artifact—into `04_revision-intake/input/<ID>/` (or attaches them in chat) and says `submit revision <ID>`. The agent runs the revision preflight first and stops with no ledger change if it fails. File presence is detected evidence; the invocation is the deliberate human submission event recorded in the ledger. Author-facing text always uses operator verbs, never raw CLI commands.
 
 ## AI behavior in this stage
 

@@ -19,6 +19,6 @@
 - `ready for architect disposition`
 - `requirement-owner confirmation needed`
 - `Security/Privacy concurrence needed`
-- `content missing`
+- `content missing` — **not dispositionable as an approval**: the artifact to approve does not exist yet. Valid dispositions are a required change returning it to the author, or an explicit deferral with an owner and due gate.
 - `implementation validation`
 - `closed`

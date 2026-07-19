@@ -16,7 +16,7 @@ The editor packages senior architecture judgment as a **critic, not a co-author*
 
 - An AI coding agent (Codex or Claude Code) opened in this repository — the agent runs the workflow; you never move packages between stages yourself.
 - **No coding agent? You can still use the editor today:** upload the `02_editor-review/` bundle to a Claude Project, ChatGPT Project/Custom GPT, or similar and paste your draft — see Option B below. The repository workflow (ledger, rounds, formal approval) needs an agent; the critique itself runs on any capable assistant.
-- **Python 3, only for the built-in helpers the agent runs on your behalf** (the Word-document converter and the state-validation checks). Standard library only — nothing to install beyond Python itself, and **you never type a Python command yourself**. No Python? Submit PDF/markdown/plain text instead of Word, and the pipeline simply runs with fewer automatic safety checks.
+- **Python 3, only for the built-in helpers the agent runs on your behalf** (the Word-document converter and the state-validation checks). Standard library only — nothing to install beyond Python itself, and **you never need to type a Python command yourself** (a CLI path exists for power users — see [`tools/README.md`](tools/README.md)). No Python? Submit PDF/markdown/plain text instead of Word, and the pipeline simply runs with fewer automatic safety checks.
 
 ## Quick start
 

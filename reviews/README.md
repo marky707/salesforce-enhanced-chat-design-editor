@@ -39,7 +39,7 @@ The card must also contain the latest transition receipt and operator verbs. A f
 ## Your next action
 1. Open [03_author-revision/input/NS-001/NS-001-author-packet.md](../03_author-revision/input/NS-001/NS-001-author-packet.md)
 2. Revise the SDD as a new version and complete the pre-filled response form
-3. Run `preflight revision NS-001`, then `submit revision NS-001`
+3. Say `submit revision NS-001` — the agent runs the revision preflight first
 
 ## Latest transition receipt
 
@@ -49,7 +49,7 @@ The card must also contain the latest transition receipt and operator verbs. A f
 - **Source artifacts:** 02_editor-review/output/NS-001/NS-001-review-round-01.md
 ```
 
-Useful waiting-state lines: *"No revision files detected yet"* · *"Revision files detected — not yet accepted; run preflight, then submit revision"* · *"Decision file detected — not yet validated; run preflight, then continue"* · *"Completed — package is read-only; new changes need a new review ID."*
+Useful waiting-state lines: *"No revision files detected yet"* · *"Revision files detected — not yet accepted; say submit revision"* · *"Decision file detected — not yet validated; say continue"* · *"Completed — package is read-only; new changes need a new review ID."*
 
 ## Ledger format
 

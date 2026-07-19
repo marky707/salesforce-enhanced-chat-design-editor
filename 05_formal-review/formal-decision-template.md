@@ -24,7 +24,9 @@
 ## Open decision dispositions
 
 <!-- The generated FORM repeats one blank block per ID from the authoritative
-     open-decision index. The agent pre-fills ID, question, state, and source only. -->
+     open-decision index. The agent pre-fills ID, question, state, and source only.
+     An entry whose index state is `content missing` cannot be approved — there is
+     nothing to approve yet; disposition it as a required change or an owned deferral. -->
 
 ### <OD-ID> — <decision title/question>
 

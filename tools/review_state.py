@@ -309,8 +309,21 @@ def preflight_start(review_id: str) -> int:
         return result.emit(f"Preflight start — {review_id}")
     result.passes.append(f"detected {len(files)} candidate file(s) in {relative(package)}")
     sdds = find_sdd_files(package)
+    sdd_text = ""
     if len(sdds) == 1:
-        result.passes.append(f"one candidate SDD: {sdds[0].name}")
+        sdd = sdds[0]
+        result.passes.append(f"one candidate SDD: {sdd.name}")
+        if sdd.suffix.lower() in {".md", ".txt"}:
+            sdd_text = sdd.read_text(encoding="utf-8", errors="ignore")
+            stripped = len(sdd_text.strip())
+            if stripped == 0:
+                result.failures.append(f"SDD file is empty: {sdd.name}")
+            elif stripped < 500:
+                result.warnings.append(
+                    f"SDD content is unusually small ({stripped} characters); confirm this is the real draft"
+                )
+        elif sdd.stat().st_size == 0:
+            result.failures.append(f"SDD file is empty: {sdd.name}")
     elif not sdds:
         result.failures.append("no SDD-like filename detected")
     else:
@@ -328,8 +341,12 @@ def preflight_start(review_id: str) -> int:
     diagrams = [p for p in files if p.suffix.lower() in {".png", ".jpg", ".jpeg", ".svg", ".drawio"}]
     if diagrams:
         result.passes.append(f"detected {len(diagrams)} separate diagram file(s)")
+    elif re.search(r"```\s*(mermaid|plantuml)|\b(flowchart|sequenceDiagram|erDiagram|stateDiagram)\b", sdd_text):
+        result.passes.append("embedded diagram blocks detected in the SDD (no separate diagram files)")
     else:
-        result.warnings.append("no separate diagrams detected; missing author-produced diagrams pass through for critique")
+        result.warnings.append(
+            "no diagrams detected (separate files or embedded blocks); missing author-produced diagrams pass through for critique"
+        )
     return result.emit(f"Preflight start — {review_id}")
 
 
@@ -651,7 +668,7 @@ def render_status(ledger: Ledger) -> str:
                 "",
                 f"1. Open [03_author-revision/input/{review_id}/{review_id}-author-packet.md](../03_author-revision/input/{review_id}/{review_id}-author-packet.md)",
                 "2. Revise the SDD as a new version, complete the response form, and submit every changed artifact",
-                f"3. Run `preflight revision {review_id}`, then `submit revision {review_id}`",
+                f"3. Say `submit revision {review_id}` — the agent runs the revision preflight first",
                 "",
                 "## Rounds and versions",
                 "",
@@ -678,10 +695,10 @@ def render_status(ledger: Ledger) -> str:
         )
         if decision_index:
             lines.append(f"2. Disposition every item in [{decision_index.name}](../05_formal-review/input/{review_id}/{decision_index.name})")
-            lines.append(f"3. Run `preflight decision {review_id}`, then `continue {review_id}`")
+            lines.append(f"3. Say `continue {review_id}` — the agent validates the decision before advancing")
         else:
             lines.append("2. Review the current design, open decisions, and residual risks")
-            lines.append(f"3. Complete the human decision form, run `preflight decision {review_id}`, then `continue {review_id}`")
+            lines.append(f"3. Complete the human decision form, then say `continue {review_id}` — the agent validates it before advancing")
     elif stage == "06_completed":
         manifest = ROOT / "06_completed" / "output" / review_id / f"{review_id}-completion-manifest.md"
         lines.extend(
@@ -858,7 +875,64 @@ def validate_state(review_id: str) -> int:
             result.failures.append("non-terminal ledger state has files in 06_completed")
         else:
             result.passes.append("no premature completed package detected")
+    else:
+        verify_terminal_package(review_id, result)
     return result.emit(f"Validate state — {review_id}")
+
+
+MANIFEST_ROW_RE = re.compile(
+    r"^\|\s*`([^`]+)`\s*\|([^|]*)\|([^|]*)\|[^|]*\|\s*`([0-9a-f]{64})`\s*\|"
+)
+
+
+def verify_terminal_package(review_id: str, result: "CheckResult") -> None:
+    """Recompute checksums for the immutable terminal package against its stored manifest."""
+    package = ROOT / "06_completed" / "input" / review_id
+    manifests = sorted(package.rglob(f"{review_id}-current-artifacts*.md"))
+    if not manifests:
+        result.warnings.append(
+            "terminal package has no checksummed artifact manifest; tampering cannot be verified (legacy run)"
+        )
+        return
+    manifest = manifests[-1]
+    checked = 0
+    clean = True
+    for line in manifest.read_text(encoding="utf-8").splitlines():
+        match = MANIFEST_ROW_RE.match(line)
+        if not match:
+            continue
+        rel, role, state, digest = (
+            match.group(1),
+            match.group(2).strip(),
+            match.group(3).strip(),
+            match.group(4),
+        )
+        target = package / rel
+        if not target.exists():
+            # Superseded/history rows and the pre-signature FORM are legitimately
+            # absent from the terminal package; only a missing current design is fatal.
+            if state == "current" and role == "solution design":
+                result.failures.append(
+                    f"terminal integrity: current solution design missing from terminal package: `{rel}`"
+                )
+                clean = False
+            elif state == "current" and "form" not in role:
+                result.warnings.append(
+                    f"terminal integrity: manifest lists current `{rel}` but it is absent from the terminal package"
+                )
+            continue
+        checked += 1
+        if sha256(target) != digest:
+            result.failures.append(
+                f"terminal integrity: SHA-256 mismatch for `{rel}` against {manifest.name} — terminal package was modified after completion"
+            )
+            clean = False
+    if checked and clean:
+        result.passes.append(
+            f"terminal package integrity verified: {checked} artifact checksum(s) match {manifest.name}"
+        )
+    elif not checked:
+        result.warnings.append(f"terminal manifest {manifest.name} lists no verifiable rows")
 
 
 def sha256(path: Path) -> str:

@@ -245,6 +245,66 @@ class ReviewStateTests(unittest.TestCase):
         self.assertIn("formal-decision-round-02-FORM.md` | required human output form", content)
         self.assertIn("formal-decision-round-02.md` | human formal decision record", content)
 
+    def test_validate_state_detects_terminal_tampering(self) -> None:
+        self.ledger(
+            "UT-090",
+            "| 2026-07-19 | 02 | v2 | 05_formal-review | 06_completed | Approved | human decision | decision.md | A. Human |",
+        )
+        sdd = self.write("06_completed/input/UT-090/design-sdd-v2.md", "# Approved design\n")
+        digest = review_state.sha256(sdd)
+        self.write(
+            "06_completed/input/UT-090/UT-090-current-artifacts-round-02.md",
+            "# Current Artifact Manifest — UT-090\n\n"
+            "| Artifact | Role | State | Declared context | SHA-256 |\n"
+            "|---|---|---|---|---|\n"
+            f"| `design-sdd-v2.md` | solution design | current | v2 / round 02 | `{digest}` |\n",
+        )
+        sdd.write_text("# Approved design\nTAMPERED AFTER COMPLETION\n", encoding="utf-8")
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.validate_state("UT-090")
+        self.assertNotEqual(code, 0)
+        self.assertIn("SHA-256 mismatch", buffer.getvalue())
+
+    def test_validate_state_passes_untampered_terminal_package(self) -> None:
+        self.ledger(
+            "UT-091",
+            "| 2026-07-19 | 02 | v2 | 05_formal-review | 06_completed | Approved | human decision | decision.md | A. Human |",
+        )
+        sdd = self.write("06_completed/input/UT-091/design-sdd-v2.md", "# Approved design\n")
+        digest = review_state.sha256(sdd)
+        self.write(
+            "06_completed/input/UT-091/UT-091-current-artifacts-round-02.md",
+            "| Artifact | Role | State | Declared context | SHA-256 |\n"
+            "|---|---|---|---|---|\n"
+            f"| `design-sdd-v2.md` | solution design | current | v2 / round 02 | `{digest}` |\n",
+        )
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            review_state.validate_state("UT-091")
+        self.assertIn("terminal package integrity verified", buffer.getvalue())
+
+    def test_preflight_start_fails_on_empty_sdd(self) -> None:
+        self.write("01_intake/input/UT-092/acme-sdd-draft-v1.md", "   \n")
+        self.write("01_intake/input/UT-092/acme-requirements.md", "| R-01 | req |")
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.preflight_start("UT-092")
+        self.assertNotEqual(code, 0)
+        self.assertIn("empty", buffer.getvalue())
+
+    def test_preflight_start_recognizes_embedded_diagrams(self) -> None:
+        body = "# Acme SDD\n" + ("Design content. " * 60) + "\n```mermaid\nflowchart TD\nA-->B\n```\n"
+        self.write("01_intake/input/UT-093/acme-sdd-draft-v1.md", body)
+        self.write("01_intake/input/UT-093/acme-requirements.md", "| R-01 | req |")
+        self.write("01_intake/input/UT-093/acme-assumptions-open-decisions.md", "- A-01")
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            review_state.preflight_start("UT-093")
+        out = buffer.getvalue()
+        self.assertIn("embedded diagram blocks detected", out)
+        self.assertNotIn("no diagrams detected", out)
+
 
 if __name__ == "__main__":
     unittest.main()
