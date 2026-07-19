@@ -95,6 +95,8 @@ Only decisions requiring accountable human judgment.
 ## Deferred Review Areas
 
 Lower-priority areas intentionally deferred until major findings are corrected.
+Each entry names its location and gap in one line — specific enough for the
+author to act on proactively. These are likely future findings.
 ```
 
 ## Round 2+ behavior

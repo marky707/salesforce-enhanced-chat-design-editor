@@ -16,6 +16,8 @@ For **each finding** below, answer three things:
 
 Do this **after** you've finished revising. Every finding must have a block, including ones you disagree with. Honesty beats polish: "I couldn't resolve the Case-failure part yet, need platform team input" is a *good* answer.
 
+**Tip:** the review's *Deferred Review Areas* section is a preview of likely future findings. Addressing those items in this same revision usually saves you a full review round — note anything you tackled under "New material introduced this round."
+
 - **Review ID:**
 - **Responding to:** `<ID>-review-round-<NN>.md`
 - **Revised document version:**
