@@ -19,11 +19,11 @@
 
 ## Completion criteria
 
-Intake completeness is **not** design readiness. A package passes intake even with a missing or weak diagram — that absence is an editor finding, recorded in the manifest and allowed through. Intake fails only when a responsible review cannot begin:
+Intake completeness is **not** design readiness. A package passes intake even with a missing or weak diagram — that absence is an editor finding, recorded in the manifest and allowed through. This includes diagrams, appendices, and sections **the draft itself references but does not include** (e.g. "see the routing diagram in Appendix A" with no Appendix A): that is design incompleteness for the editor to critique, never an intake blocker. Intake fails only when a responsible review cannot begin:
 
 - No readable design document
 - The intended scope cannot be identified
-- Files the draft references are unavailable with no explanation
+- **Source material** the review cannot responsibly proceed without is referenced but unavailable and unexplained — external inputs the design builds on (a requirements document, a cited standard, a predecessor design), not artifacts the author was supposed to produce as part of the design
 - The package cannot be associated with a review ID and document version
 
 ## Routing

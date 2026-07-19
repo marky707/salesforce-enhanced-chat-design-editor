@@ -18,7 +18,7 @@
 | Requirements list | yes/no | | |
 | Assumptions & open decisions | yes/no | | |
 | Diagrams supplied | yes/no/partial | | List which of the six standard diagrams appear |
-| Referenced files available | yes/no/n-a | | Unexplained unavailable references fail intake |
+| Referenced source material available | yes/no/n-a | | Only missing **external inputs** (requirements docs, cited standards) fail intake; missing design artifacts the draft references (diagrams, appendices) pass through as known absences |
 
 ## Known absences passed through for critique
 
