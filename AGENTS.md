@@ -47,7 +47,15 @@ Given the latest ledger row (or triggering event), route the package and read th
 | Latest row `To stage` = `06_completed`, manifest written | nowhere — terminal | — | **STOP** |
 | Ambiguous / contradictory state | nowhere — write state-error report to current stage `output/<ID>/` | — | **STOP** — human reconciles |
 
-## Invariants — never break these
+## Chat-submitted documents
+
+When the user attaches or pastes documents in chat (a draft SDD, a revision, supporting artifacts), treat that as a **submission to be filed, never reviewed in place**:
+
+1. Determine the destination from the ledger state via the routing table: no active review (or user says it's new) → `01_intake/input/<ID>/`; active review awaiting the author → `04_revision-intake/input/<ID>/`. Multiple active reviews and no ID named → ask which.
+2. Write the files there **verbatim** (convert `.docx` per `01_intake/CONTEXT.md`), normalizing filenames to the package convention (versioned, review-ID-consistent) and telling the user each rename.
+3. Confirm the placement, record the user as the human actor in the ledger row, then run the destination stage's normal validation — chat upload is a filing convenience and never waives intake checks, the response-log requirement, or any other contract.
+
+Never critique an attached document directly in chat while skipping the pipeline: an unfiled review has no ledger, no round number, and no audit trail.
 
 - **Critique only.** The editor never writes replacement design content, generates diagrams, or completes a design — in any stage, for any reason, including "the author asked."
 - **Approval is human.** Never infer, create, or simulate a formal decision. Document readiness ≠ architecture approval. `06_completed/` rejects packages lacking a human-authored decision record.

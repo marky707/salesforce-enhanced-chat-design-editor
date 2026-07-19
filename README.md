@@ -16,7 +16,7 @@ The editor packages senior architecture judgment as a **critic, not a co-author*
 
 **Option A — full pipeline (Codex or Claude Code in this repo):**
 
-1. Put your draft SDD, requirements, assumptions/open decisions, and diagrams in `01_intake/input/<ID>/` (pick an ID like `AC-001`, or let the agent assign one).
+1. Put your draft SDD, requirements, assumptions/open decisions, and diagrams in `01_intake/input/<ID>/` (pick an ID like `AC-001`, or let the agent assign one) — **or simply attach the files in chat** and say what they are; the agent files them into the correct stage folder for you and confirms where they went. Same for revisions later.
 2. Say: *"Start a new review from 01_intake/input/. Assign a review ID if one is not already declared, process every eligible automatic transition, and stop at the next required human action."*
 3. For an existing review: *"Run the workflow for review ID `<ID>` from its current stage. Follow the routing contracts, complete every eligible automatic transition, preserve prior rounds, and stop at the next required human action or completed state."*
 
