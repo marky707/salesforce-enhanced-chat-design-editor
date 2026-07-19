@@ -16,6 +16,8 @@ Everything here is **fictional**, created to demonstrate and test the editor. No
 3. The package should pass intake, receive a `Revise Before Formal Review` verdict with five findings, and stop at `03_author-revision/` awaiting the author.
 4. Compare the generated review with `expected-review-round-01.md` — findings should match in substance and form: exact anchors, consequences, author tasks, **no rewritten design content**.
 
+Before and after each transition, run `python3 tools/review_state.py validate-state NS-001`. Use `preflight revision` before accepting a fictional author revision. A demo may proceed to `05_formal-review`, but an AI must not fill or simulate the signed formal decision; completion requires a real human to sign the fictional form.
+
 ## Validation use
 
-Maintainers: run this demo after any change to `rules.md`, `identity.md`, or `reference/`. Deviations to check — generic critique, replacement wording, generated diagrams, more than five findings, or any implication of approval. The eight acceptance routes in the root `CONTEXT.md` stage table can all be exercised from this package by simulating the author's and reviewer's actions.
+Maintainers: run this demo after changes to rules, contracts, templates, status, or helpers. Check generic critique, replacement wording, generated diagrams, more than five findings, false approval, stale status, broken links, registry pollution, round/version drift, requirement-to-acceptance weakening, decision-index drift, and premature completion. To test revision intake, use a pre-authored canned fictional revision or a real human author submission; the editor agent does not write the design fix. Formal signature/approval may never be simulated by an AI.

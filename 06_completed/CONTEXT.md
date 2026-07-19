@@ -6,7 +6,7 @@
 
 ## Input vs output here
 
-- `input/<ID>/` receives the approved package copied from `05_formal-review`: final SDD, formal decision record, all review rounds, all response logs, all manifests.
+- `input/<ID>/` receives the approved package assembled from the workflow: final SDD, current supporting artifacts, formal decision, all review rounds, all response logs, all manifests, workflow evidence, and owned conditions/residual-risk dispositions. Superseded SDDs remain preserved in stages `01`–`05` and are excluded here.
 - `output/<ID>/` holds only the generated `<ID>-completion-manifest.md` inventorying that package.
 
 ## Admission rule
@@ -21,4 +21,4 @@ After writing the manifest, regenerate the status card as **Completed** and repo
 
 ## Prohibitions
 
-Do not place unapproved or superseded drafts here. Do not modify anything after completion — corrections to an approved design are a **new review** with a new review ID that references this one.
+Do not place unapproved or superseded drafts here. Do not modify anything after completion — corrections to an approved design are a **new review** with a new review ID that references this one. Run `validate-state <ID>` after completion and verify the manifest checksums before reporting DONE.

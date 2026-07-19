@@ -16,7 +16,7 @@ For **each finding** below, answer three things:
 
 Do this **after** you've finished revising. Every finding must have a block, including ones you disagree with. Honesty beats polish: "I couldn't resolve the Case-failure part yet, need platform team input" is a *good* answer.
 
-**Tip:** the review's *Deferred Review Areas* section is a preview of likely future findings. Addressing those items in this same revision usually saves you a full review round — note anything you tackled under "New material introduced this round."
+**Tip:** the review's *Deferred Review Areas* section is a preview, not an unbounded second findings list. Use its timing labels: address `likely next-round Blocking/High` items now when feasible; preserve `build-entry validation` as owned evidence gates; treat `valuable improvement` as optional unless it affects your changes. Note anything you tackled under "New material introduced this round."
 
 **If you changed a supporting artifact** (requirements list, assumptions/decisions register): give it a new versioned filename, list it under "New material introduced this round," and **re-read it once against your revised SDD before submitting** — the most common resubmission failure is a supporting artifact that quietly disagrees with the SDD or with this log (e.g. text pasted from the wrong document, or a register still calling "open" a decision your SDD closed). Revision intake cross-checks all three and will bounce a contradictory package.
 
@@ -64,3 +64,12 @@ Use one disposition notation throughout: mark the checkboxes (`[x]`) — free-te
 <!-- New sections, diagrams, or supporting files the editor has not seen before. -->
 
 -
+
+## Author pre-submit checklist
+
+- [ ] Preserve the prior SDD; use a new versioned filename for changed design content
+- [ ] Answer every finding with one disposition, location, and explanation
+- [ ] Version only the supporting artifacts whose content changed
+- [ ] Verify filenames and internal references agree
+- [ ] Copy every changed submission artifact into `04_revision-intake/input/<ID>/`
+- [ ] Run `preflight revision <ID>` before `submit revision <ID>`

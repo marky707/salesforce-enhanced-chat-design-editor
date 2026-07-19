@@ -28,8 +28,8 @@ Intake completeness is **not** design readiness. A package passes intake even wi
 
 ## Routing
 
-- **New submission with no ledger →** confirm or assign the review ID (scheme in root `CONTEXT.md`; check `reviews/` for taken IDs), then create `reviews/<ID>-routing-log.md` with a `received` row naming the human submitter. Then validate.
-- **Complete →** copy `input/<ID>/` to `02_editor-review/input/<ID>/`, append ledger row, continue automatically.
+- **New submission with no ledger →** run `python3 tools/review_state.py preflight start <ID>`. Confirm/assign the ID, resolve preflight failures, identify the real human submitter (document author and demo invoker may be recorded separately in the manifest), then create the ledger with a `received` row. Preflight does not reserve the ID.
+- **Complete →** copy `input/<ID>/` to `02_editor-review/input/<ID>/`, append ledger row, regenerate status, run `validate-state <ID>`, and continue automatically.
 - **Incomplete →** package remains here; write the errors report; append ledger row (`intake incomplete`); stop for the author to supply missing material.
 
 ## Prohibitions

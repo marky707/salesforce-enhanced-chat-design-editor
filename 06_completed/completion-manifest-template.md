@@ -24,6 +24,12 @@
 | <!-- one row per additional round --> | |
 | Routing ledger | `reviews/<ID>-routing-log.md` |
 
+## Conditions and residual risks carried forward
+
+| ID | Condition / risk | Owner | Evidence / due gate | Blocking? | Final disposition |
+|---|---|---|---|---|---|
+| | | | | no | |
+
 ## Integrity statement
 
-All artifacts listed above are present, unmodified, and traceable through the routing ledger. This package is read-only; subsequent changes require a new review ID referencing this one.
+All artifacts listed above are present, unmodified, checksummed in the final artifact manifest, and traceable through the routing ledger. Superseded SDDs remain preserved in upstream stages and are intentionally excluded from this terminal package. `validate-state` passed after completion. This package is read-only; subsequent changes require a new review ID referencing this one.

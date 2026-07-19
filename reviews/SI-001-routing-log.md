@@ -1,6 +1,6 @@
 # Routing Ledger — SI-001
 
-Demo: no
+Demo: yes
 
 | Date | Round | Doc version | From stage | To stage | Status / verdict | Reason | Source artifacts | Human actor |
 |---|---|---|---|---|---|---|---|---|

@@ -22,6 +22,7 @@ The formal-review readiness standard, expanded into checkable items. The documen
 - [ ] Every material requirement maps to a design element
 - [ ] Every material requirement appears in a process flow
 - [ ] Every material requirement has a validation method
+- [ ] Acceptance criteria preserve the requirement's quantifier, population, threshold, and timing — or an accountable requirement owner explicitly approves the change
 - [ ] No design element exists without a driving requirement (gold-plating check)
 
 ## 4. Critical failures are addressed
@@ -49,6 +50,7 @@ The formal-review readiness standard, expanded into checkable items. The documen
 4. A high-risk failure has no defined behavior.
 5. A design statement cannot be tested.
 6. The diagrams, tables, and prose contradict one another.
+7. An acceptance criterion silently weakens a material requirement without accountable owner disposition.
 
 ## Verdict mapping
 

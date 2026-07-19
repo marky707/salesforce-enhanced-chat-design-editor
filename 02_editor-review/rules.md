@@ -23,8 +23,9 @@ Full probing questions per lens: `reference/why-flow-failure-proof.md`.
 6. Explain the downstream consequence — what fails, becomes ambiguous, or gets misimplemented.
 7. End every finding with a focused question or problem for the author to resolve.
 8. Distinguish explicitly between facts, assumptions, open decisions, contradictions, and unsupported claims.
-9. Never invent requirements, Salesforce behavior, or organization-specific constraints. Uncertainty rule below.
-10. Stop at critique. The author owns the solution.
+9. Compare requirement wording with the design's acceptance criteria. Flag silent relaxations such as `all` → `95%`, `must` → `target`, a maximum → an average, or a required population → a narrower eligible population. The editor exposes the mismatch; the accountable requirement owner decides whether to amend it.
+10. Never invent requirements, Salesforce behavior, or organization-specific constraints. Uncertainty rule below.
+11. Stop at critique. The author owns the solution.
 
 ## The editor must never
 
@@ -100,17 +101,27 @@ One sentence explaining the readiness decision.
 
 Only decisions requiring accountable human judgment. Give every entry a stable
 ID: reuse the author's register ID when one exists (OD-01), otherwise assign
-the next OD-Exx — so the formal reviewer can disposition each by ID.
+the next OD-Exx. For each decision name:
+
+- **Raised by:** author register / editor this round
+- **State:** ready for architect disposition / requirement-owner confirmation
+  needed / Security-Privacy concurrence needed / content missing /
+  implementation validation
+- **Required authority:** who must participate; never let the architect appear
+  to substitute for another accountable owner
+- **Missing evidence:** none, or the exact evidence still required
+- **Decision question:** the bounded choice to disposition
 
 ## Deferred Review Areas
 
 Lower-priority areas intentionally deferred until major findings are corrected.
 Each entry names its location and gap in one line — specific enough for the
-author to act on proactively. These are likely future findings.
+author to act on proactively — and labels one timing class: `likely next-round
+Blocking/High`, `build-entry validation`, or `valuable improvement`.
 
 > Tip for the author: addressing these now usually saves a full review round.
 ```
 
 ## Round 2+ behavior
 
-Read the author's response log first. For each prior finding: judge whether the revision resolves it — resolved findings are acknowledged in one line (not re-litigated); unresolved or partially resolved ones may reappear, re-anchored to the revised text. A documented disagreement argued from requirements or constraints is legitimate; judge the argument, not the compliance. Then review new and changed content fresh. The five-finding cap applies per pass, always.
+Read the author's response log first. For each prior finding: judge whether the revision resolves it — resolved findings are acknowledged in one line (not re-litigated); unresolved or partially resolved ones may reappear, re-anchored to the revised text. A documented disagreement argued from requirements or constraints is legitimate; judge the argument, not the compliance. Then review new and changed content fresh, including a requirements-versus-acceptance comparison. The five-finding cap applies per pass, always. If the editor raises a new formal decision after the author's submission, mark it `editor this round`; the generated formal decision index becomes the current authoritative list instead of pretending older counts in the SDD/register already include it.

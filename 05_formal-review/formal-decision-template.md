@@ -2,7 +2,9 @@
 
 <!-- Stable template: contains no run-specific facts. Fill a copy in output/<ID>/.
      THIS RECORD MUST BE AUTHORED BY THE ACCOUNTABLE HUMAN REVIEWER.
-     An AI agent must never fill in the Decision, Conditions, or Signature sections. -->
+     The routing agent may pre-fill administrative metadata, decision IDs/questions,
+     and source links only. An AI agent must never select options, write rationale,
+     supply concurrence, create conditions/required changes, or sign. -->
 
 - **Review ID:**
 - **Document version reviewed:**
@@ -14,6 +16,25 @@
 <!-- Circle one. This is architecture approval authority — human judgment only. -->
 
 `Approved` / `Approved with Conditions` / `Changes Required`
+
+- `Approved` → the validated final package advances to read-only completion.
+- `Approved with Conditions` → advances only when every condition is owned, dispositioned, and explicitly non-blocking.
+- `Changes Required` → the workflow creates an author packet and returns through revision intake and editor review.
+
+## Open decision dispositions
+
+<!-- The generated FORM repeats one blank block per ID from the authoritative
+     open-decision index. The agent pre-fills ID, question, state, and source only. -->
+
+### <OD-ID> — <decision title/question>
+
+- **State from decision index:**
+- **Source:**
+- **Selected option / disposition (human):**
+- **Reviewer rationale (human):**
+- **Required concurrence and evidence (human):**
+- **Condition or required change (human):**
+- **Blocking? (human):** yes / no / n-a
 
 ## Rationale
 
@@ -34,6 +55,12 @@
 
 -
 
+## Residual risk dispositions
+
+| Risk | Owner | Required evidence | Due gate | Blocking? | Human disposition |
+|---|---|---|---|---|---|
+| | | | architecture / build entry / UAT / production entry | yes/no | |
+
 ## Signature
 
 - **Accountable reviewer (human actor):**
@@ -44,7 +71,16 @@
 
 **After signing — four steps, then you're done:**
 
-1. Save this file as `<ID>-formal-decision.md` in `05_formal-review/output/<ID>/` (create the folder if needed, or attach the signed file in chat and ask the agent to file it).
-2. Tell the agent: *"I've recorded my formal decision for `<ID>`. Please continue the workflow."*
-3. Do **not** create or move anything in `06_completed/` yourself — the workflow validates this record and advances the package.
-4. You are done when the status card (`reviews/<ID>-status.md`) says **Completed**.
+1. Save this file as `<ID>-formal-decision-round-<NN>.md` in `05_formal-review/output/<ID>/`, using the current ledger round for `<NN>` (create the folder if needed, or attach the signed file in chat and ask the agent to file it).
+2. Run `preflight decision <ID>` (or ask the agent). Correct any missing decision IDs, concurrence, conditions, required changes, or signature fields.
+3. Tell the agent: *"I've recorded my formal decision for `<ID>`. Please continue the workflow."*
+4. Do **not** move anything into `06_completed/`; you are done only when status shows **Completed** or names the next author action.
+
+## Human completeness checklist
+
+- [ ] Every ID in `<ID>-open-decision-index-round-<NN>.md` has a disposition and rationale
+- [ ] Required co-owner/concurrence evidence is named
+- [ ] Conditions have owners, dispositions, and blocking status
+- [ ] `Changes Required` includes specific author-action bullets
+- [ ] Residual risks have an owner/evidence gate or an explicit disposition
+- [ ] Decision, accountable reviewer, role, and signature date are complete

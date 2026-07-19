@@ -21,10 +21,12 @@ A resubmission is complete when:
 - The response log answers **every** finding of the review round it names (resolved, partially resolved, or documented disagreement — disagreement does not fail intake)
 - The response log names the correct review round
 - New artifacts the revised draft references are present or their absence is explained
+- Material requirement wording and SDD acceptance criteria have been compared; any silent quantifier/population/threshold change is recorded for editor review rather than accepted administratively
 
 ## Routing
 
-- **Complete →** copy `input/<ID>/` to `02_editor-review/input/<ID>/`, **increment the review round**, append ledger row, continue automatically.
+- **Submission order →** while the ledger still waits at `03_author-revision`, run `python3 tools/review_state.py preflight revision <ID>`. A failure stops with no ledger change. When preflight passes and the human invokes `submit revision <ID>`, append the human submission row (`03` → `04`), then perform this stage's validation. Record warnings—including requirement/acceptance drift—in the manifest and pass them to the editor.
+- **Complete →** copy `input/<ID>/` to `02_editor-review/input/<ID>/`, retain unchanged current supporting artifacts from the prior package, **increment the review round**, append ledger row, regenerate status, validate state, and continue automatically.
 - **Incomplete →** copy the errors report to `03_author-revision/input/<ID>/`, append ledger row, stop (human stop).
 
 ## Prohibitions

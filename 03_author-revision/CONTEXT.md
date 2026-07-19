@@ -15,10 +15,13 @@
 
 - Revised SDD (new document version)
 - `<ID>-revision-response-round-<NN>.md` — one traceable response per finding: the location changed, the rationale, or a documented disagreement
+- Any changed supporting artifacts, each with a new versioned filename
+
+This output folder is the author's retained working/archive location. The author may work elsewhere, but the finished author-owned copies land here before submission so the audit distinguishes authored output from the next stage's intake copy.
 
 ## Routing
 
-**No automatic exit.** When finished, the author copies the revised SDD, completed response log, and any new or changed supporting artifacts into `04_revision-intake/input/<ID>/` and invokes the workflow. That submission is a human action — record the human actor in the ledger row.
+**No automatic exit.** When finished, the author copies **every changed submission artifact**—revised SDD, completed response log, and any new/versioned supporting artifact—into `04_revision-intake/input/<ID>/`. Run `python3 tools/review_state.py preflight revision <ID>` before invoking `submit revision <ID>`. File presence is detected evidence; the invocation is the deliberate human submission event recorded in the ledger.
 
 ## AI behavior in this stage
 

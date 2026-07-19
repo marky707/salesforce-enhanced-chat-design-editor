@@ -17,6 +17,8 @@
 | Response log for the correct round | yes/no | | |
 | Every prior finding answered | yes/no | | List any unanswered finding numbers |
 | New/changed artifacts present or explained | yes/no/n-a | | |
+| Preflight revision result | pass/fail | | Record warning count and exact command |
+| Requirement/acceptance drift warnings | none/list | | Pass warnings to editor; intake does not disposition them |
 
 ## Traceability check
 
@@ -30,3 +32,10 @@
 - **Next stage:** 02_editor-review (round incremented) / 03_author-revision
 - **Reason:**
 - **Errors report:** none / `<ID>-revision-intake-errors-round-<NN>.md`
+
+## Transition receipt (when complete)
+
+- **Accepted files:**
+- **Unchanged current artifacts retained from prior package:**
+- **Round change:** answering round `<NN>` → next editor round `<NN+1>`
+- **State validation:** pass / fail (`python3 tools/review_state.py validate-state <ID>` after ledger append)
