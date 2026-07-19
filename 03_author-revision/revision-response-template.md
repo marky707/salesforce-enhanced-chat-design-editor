@@ -1,8 +1,20 @@
 # Revision Response Log — <REVIEW-ID> — Round <NN>
 
-<!-- Stable template: contains no run-specific facts. Fill a copy in output/<ID>/.
-     One response block per finding. Every finding from the review being answered
-     must appear here — including ones you disagree with. -->
+<!-- Stable template: contains no run-specific facts.
+     PIPELINE NOTE: the agent routing a review to 03_author-revision generates a
+     pre-populated copy of this form in the author's packet — one block per finding,
+     with the finding number and title already filled in. The author only completes
+     the three answer lines in each block. -->
+
+## How to fill this out (takes ~10 minutes after you've revised your document)
+
+For **each finding** below, answer three things:
+
+1. **Disposition** — mark one: `resolved` / `partially resolved` / `disagree`
+2. **Where** — the section, table, or diagram of your revised document that changed (or "no change" if you disagree)
+3. **Why** — 2–3 sentences **in your own words**. Plain language is fine; you are explaining, not writing a formal document. If you disagree, say why — disagreement is allowed when you argue it from a requirement or constraint.
+
+Do this **after** you've finished revising. Every finding must have a block, including ones you disagree with. Honesty beats polish: "I couldn't resolve the Case-failure part yet, need platform team input" is a *good* answer.
 
 - **Review ID:**
 - **Responding to:** `<ID>-review-round-<NN>.md`
@@ -12,13 +24,23 @@
 
 ---
 
-## Finding 1: <finding title from the review>
+## Finding <N>: <finding title, pre-filled by the agent from the review>
 
-- **Disposition:** resolved / partially resolved / disagree
-- **Where the design changed:** exact section(s), table(s), or diagram(s) of the revised SDD — or "no change"
-- **What changed / rationale:** describe the design decision you made and why. If you disagree with the finding, state your reasoning; disagreement is legitimate when argued from requirements or constraints.
+- **Disposition (mark one):** [ ] resolved  [ ] partially resolved  [ ] disagree
+- **Where the design changed:**
+- **What changed / why (your own words):**
 
-<!-- Repeat one block per finding. -->
+<!-- The generated copy repeats this block once per finding, titles pre-filled. -->
+
+---
+
+### Example of a completed block (delete from your copy)
+
+## Finding 2: Push timeout behavior is undefined
+
+- **Disposition (mark one):** [x] resolved
+- **Where the design changed:** Section 4.2
+- **What changed / why (your own words):** I added a 30-second push timeout — if the agent doesn't accept, it goes to the next available agent. I picked 30 seconds because that's what our phone team uses for ring time.
 
 ---
 
