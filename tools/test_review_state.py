@@ -209,6 +209,10 @@ class ReviewStateTests(unittest.TestCase):
 |---|---|---|---|---|
 | 1 | Verify mapping | Platform owner | Accepted before build | no |
 
+## Residual risk dispositions
+
+None — no residual risks identified for this round.
+
 ## Signature
 - **Accountable reviewer (human actor):** A. Reviewer
 - **Role:** Architect
