@@ -25,7 +25,7 @@ The persona and references load **only** in this stage. Leaving this stage, drop
 ## Routing
 
 - **`Revise Before Formal Review` or `Insufficient Context` →** copy the package plus the new review report to `03_author-revision/input/<ID>/`. Also generate `<ID>-revision-response-round-<NN>.md` there from `03_author-revision/revision-response-template.md`, pre-populated with one block per finding (number and title filled in; answer lines left blank — pre-filling titles is administrative, answering them is the author's). Append ledger row, stop (human stop follows).
-- **`Ready for Formal Review` or `Ready for Formal Review with Open Decisions` →** copy the package, review history, and response logs to `05_formal-review/input/<ID>/`, append ledger row, stop (human stop follows).
+- **`Ready for Formal Review` or `Ready for Formal Review with Open Decisions` →** copy the package, review history, and response logs to `05_formal-review/input/<ID>/`, and generate `<ID>-formal-review-packet.md` there — a one-page cover sheet for the human reviewer naming: the current SDD version to review, the latest review (verdict + open decisions), the decision template, a suggested reading order, and a one-line inventory of the history files. The cover sheet summarizes and points; it must not argue for approval. Append ledger row, stop (human stop follows).
 
 ## Prohibitions
 

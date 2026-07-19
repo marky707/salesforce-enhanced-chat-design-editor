@@ -6,6 +6,7 @@
 
 ## Input (`input/<ID>/`)
 
+- **`<ID>-formal-review-packet.md` — start here.** The cover sheet names the SDD version under review, the latest review with its open decisions, the decision form, and the reading order; everything else in the folder is history you consult only as needed.
 - Latest design (the version that earned the ready verdict)
 - The latest ready verdict and complete review history (all rounds)
 - All revision-response logs
