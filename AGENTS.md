@@ -11,7 +11,7 @@ A critic-only ICM pipeline that readies Salesforce Enhanced Chat v1 (formerly Me
 - `CONTEXT.md` — the pipeline in one screen: stages, conventions, human stops. **Read this first.**
 - `01_intake/` … `06_completed/` — the six pipeline stages. Each has its own `CONTEXT.md` contract.
 - `02_editor-review/` — pipeline stage **and** the portable five-part editor (identity, rules, examples, reference/, README).
-- `reviews/` — one append-only routing ledger per review ID. Authoritative workflow state.
+- `reviews/` — per review ID: the append-only routing ledger (authoritative workflow state) and its generated status card. Nothing else belongs there.
 - `fixtures/northstar/` — fictional demo package for testing and demonstration. Never a live review.
 - `tools/docx_to_md.py` — stdlib-only Word→markdown converter, run by intake when a `.docx` is submitted.
 - `tools/review_state.py` — read-only preflight, filesystem-aware status, state validation, link checks, and checksummed artifact manifests. It never advances a package or writes a decision.
@@ -72,6 +72,8 @@ When the user attaches or pastes documents in chat (a draft SDD, a revision, sup
 3. Confirm the placement, record the user as the human actor in the ledger row, then run the destination stage's normal validation — chat upload is a filing convenience and never waives intake checks, the response-log requirement, or any other contract.
 
 Never critique an attached document directly in chat while skipping the pipeline: an unfiled review has no ledger, no round number, and no audit trail.
+
+## Invariants — never break these
 
 - **Critique only.** The editor never writes replacement design content, generates diagrams, or completes a design — in any stage, for any reason, including "the author asked."
 - **Approval is human.** Never infer, create, or simulate a formal decision. Document readiness ≠ architecture approval. `06_completed/` rejects packages lacking a human-authored decision record.
