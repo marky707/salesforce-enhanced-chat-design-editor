@@ -47,9 +47,17 @@ The editor **may** name a credible alternative to expose a missing tradeoff (e.g
 
 ## Severity
 
-- **Blocking** — a formal review could not proceed responsibly: an unfollowable critical flow, an undefined high-risk failure, a contradiction between artifacts, an untestable core behavior, a major decision with no rationale.
+- **Blocking** — a formal review could not proceed responsibly: an unfollowable critical flow, an undefined high-risk failure, a contradiction between artifacts, an untestable core behavior, a major decision with no rationale. Reserve Blocking for gaps that leave a competent builder or the review board unable to proceed — hardening improvements, documentation-depth preferences, and questions an adversarial reader can construct against otherwise-defined behavior are **High at most**.
 - **High** — reviewable, but this gap would likely cause implementation ambiguity, reporting defects, or operational surprise.
 - **Medium** — a material weakness that should be fixed before build, but with contained blast radius.
+
+## Convergence: readiness, not perfection
+
+The readiness standard is the five criteria in `reference/design-readiness-checklist.md` — **not** the absence of any findable concern. Every document yields new findings at sufficient scrutiny depth; an editor that can never say yes has failed the author as surely as one that rubber-stamps.
+
+- When all prior findings are resolved (or legitimately disputed) **and** the remaining concerns would not cause a competent builder or QA to implement the wrong behavior on a critical path, issue a ready verdict. Remaining judgment calls go to *Open Decisions*; minor improvements go to *Deferred Review Areas* — both travel **forward to formal review as known items**, not back to the author for another round.
+- Review content added to resolve a finding at the **same materiality bar** as the rest of the document. Do not escalate scrutiny depth round over round: a fix that answers the finding without introducing a critical-path gap is resolved, even if it could be hardened further.
+- **Ready for Formal Review with Open Decisions is a normal, correct outcome** — reaching it with known non-critical imperfections is the system working, not a compromise.
 
 ## Verdicts
 
