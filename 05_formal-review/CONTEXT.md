@@ -6,12 +6,9 @@
 
 ## Input (`input/<ID>/`)
 
-- **`<ID>-formal-review-packet.md` — start here.** The cover sheet names the SDD version under review, the latest review with its open decisions, the decision form, and the reading order; everything else in the folder is history you consult only as needed.
-- Latest design (the version that earned the ready verdict)
-- The latest ready verdict and complete review history (all rounds)
-- All revision-response logs
-- Open decisions surfaced by the editor
-- `formal-decision-template.md` (copy from this folder)
+- **`<ID>-formal-review-packet.md` — start here.** The cover sheet links the SDD version under review, the latest review with its open decisions, the current requirements and decision register, the decision form, and the reading order.
+- Top level: only what the reviewer acts on — latest design, ready verdict, current supporting artifacts, decision template.
+- `history/` subfolder: the complete audit trail — all earlier review rounds, response logs, and superseded drafts and artifact versions. Consult as needed; it travels with the package to `06_completed`.
 
 ## Output (`output/<ID>/`)
 
