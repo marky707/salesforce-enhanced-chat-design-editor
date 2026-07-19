@@ -72,4 +72,4 @@ Use one disposition notation throughout: mark the checkboxes (`[x]`) — free-te
 - [ ] Version only the supporting artifacts whose content changed
 - [ ] Verify filenames and internal references agree
 - [ ] Copy every changed submission artifact into `04_revision-intake/input/<ID>/`
-- [ ] Run `preflight revision <ID>` before `submit revision <ID>`
+- [ ] Say `submit revision <ID>` — the agent runs the revision preflight automatically before accepting

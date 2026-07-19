@@ -458,6 +458,95 @@ class ReviewStateTests(unittest.TestCase):
         self.assertIn("zero open decisions", out)
         self.assertEqual(code, 0)
 
+    def test_plain_approved_rejects_unowned_content_missing_deferral(self) -> None:
+        self._formal_setup(
+            "UT-103",
+            "| OD-01 | register | content missing | Architect | wording draft | Approve wording? | link |",
+        )
+        self.write(
+            "05_formal-review/output/UT-103/UT-103-formal-decision-round-02.md",
+            "# Formal Architecture Review Decision — UT-103 — Round 02\n\n"
+            "- **Review ID:** UT-103\n\n"
+            "## Decision\n\n`Approved`\n\n"
+            "### OD-01 — Sample decision\n\n"
+            "- **Selected option / disposition (human):** Deferred to the next release\n"
+            "- **Reviewer rationale (human):** We can live without it for now.\n"
+            "- **Required concurrence and evidence (human):** E-commerce owner confirmation once drafted\n"
+            "- **Blocking? (human):** no\n\n"
+            "## Signature\n\n"
+            "- **Accountable reviewer (human actor):** A. Human\n"
+            "- **Role:** Senior Architect\n"
+            "- **Date signed (ISO 8601):** 2026-07-19\n",
+        )
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.preflight_decision("UT-103")
+        self.assertNotEqual(code, 0)
+        self.assertIn("no owned home for that deferral", buffer.getvalue())
+
+    def test_residual_risk_rows_require_blocking_and_disposition(self) -> None:
+        self._formal_setup(
+            "UT-104",
+            "| OD-01 | register | ready for architect disposition | Architect | none | Choice? | link |",
+        )
+        self.write(
+            "05_formal-review/output/UT-104/UT-104-formal-decision-round-02.md",
+            "# Formal Architecture Review Decision — UT-104 — Round 02\n\n"
+            "- **Review ID:** UT-104\n\n"
+            "## Decision\n\n`Changes Required`\n\n"
+            "### OD-01 — Sample decision\n\n"
+            "- **Selected option / disposition (human):** Returned to the author\n"
+            "- **Reviewer rationale (human):** Needs work.\n"
+            "- **Required concurrence and evidence (human):** none required\n"
+            "- **Blocking? (human):** yes\n\n"
+            "## Required changes (only for Changes Required)\n\n- 1. Fix it.\n\n"
+            "## Residual risk dispositions\n\n"
+            "| Risk | Owner | Required evidence | Due gate | Blocking? | Human disposition |\n"
+            "|---|---|---|---|---|---|\n"
+            "| Data retention | Legal | Policy sign-off | production entry | | |\n\n"
+            "## Signature\n\n"
+            "- **Accountable reviewer (human actor):** A. Human\n"
+            "- **Role:** Senior Architect\n"
+            "- **Date signed (ISO 8601):** 2026-07-19\n",
+        )
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.preflight_decision("UT-104")
+        out = buffer.getvalue()
+        self.assertNotEqual(code, 0)
+        self.assertIn("no explicit yes/no blocking status", out)
+        self.assertIn("no human disposition", out)
+
+    def test_blocking_residual_risk_contradicts_plain_approved(self) -> None:
+        self._formal_setup(
+            "UT-105",
+            "| OD-01 | register | ready for architect disposition | Architect | none | Choice? | link |",
+        )
+        self.write(
+            "05_formal-review/output/UT-105/UT-105-formal-decision-round-02.md",
+            "# Formal Architecture Review Decision — UT-105 — Round 02\n\n"
+            "- **Review ID:** UT-105\n\n"
+            "## Decision\n\n`Approved`\n\n"
+            "### OD-01 — Sample decision\n\n"
+            "- **Selected option / disposition (human):** Option A selected\n"
+            "- **Reviewer rationale (human):** Sound.\n"
+            "- **Required concurrence and evidence (human):** none required\n"
+            "- **Blocking? (human):** no\n\n"
+            "## Residual risk dispositions\n\n"
+            "| Risk | Owner | Required evidence | Due gate | Blocking? | Human disposition |\n"
+            "|---|---|---|---|---|---|\n"
+            "| R-05 threshold | Owner X | Written reconciliation | architecture | yes | Must return |\n\n"
+            "## Signature\n\n"
+            "- **Accountable reviewer (human actor):** A. Human\n"
+            "- **Role:** Senior Architect\n"
+            "- **Date signed (ISO 8601):** 2026-07-19\n",
+        )
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.preflight_decision("UT-105")
+        self.assertNotEqual(code, 0)
+        self.assertIn("contradicts a plain Approved decision", buffer.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main()

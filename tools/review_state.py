@@ -609,6 +609,10 @@ def preflight_decision(review_id: str) -> int:
                     result.failures.append(
                         f"{item} is `content missing` and cannot be approved — the artifact to approve does not exist; disposition it as a required change or an owned deferral"
                     )
+                elif re.search(r"defer", disposition) and value == "Approved":
+                    result.failures.append(
+                        f"{item} is `content missing` and deferred, but a plain Approved decision has no owned home for that deferral — use Approved with Conditions (owned, non-blocking condition) or Changes Required"
+                    )
             if gated:
                 concurrence_raw = block_field(block, "Required concurrence and evidence (human)")
                 concurrence = concurrence_raw.lower()
@@ -654,7 +658,38 @@ def preflight_decision(review_id: str) -> int:
             result.passes.append(f"{len(bullets)} required-change item(s) recorded")
         else:
             result.failures.append("Changes Required has no specific required-change bullets")
+    check_residual_risks(text, value, result)
     return result.emit(f"Preflight decision — {review_id}")
+
+
+def check_residual_risks(text: str, value: str | None, result: "CheckResult") -> None:
+    """Machine-enforce the residual-risk table: named rows need blocking status and a human disposition."""
+    section = re.search(r"^## Residual risk dispositions.*?(?=^## |\Z)", text, re.M | re.S | re.I)
+    if not section:
+        return
+    rows = []
+    for line in section.group(0).splitlines():
+        cells = split_table_row(line) if line.strip().startswith("|") else []
+        if len(cells) >= 6 and cells[0] and cells[0].lower() not in {"risk", "---"} and not set(cells[0]) <= {"-"}:
+            rows.append(cells)
+    if not rows:
+        return
+    complete = True
+    for cells in rows:
+        risk, blocking, disposition = cells[0], cells[4].strip().lower(), cells[5].strip()
+        if blocking not in {"yes", "no"}:
+            result.failures.append(f"residual risk '{risk}' has no explicit yes/no blocking status")
+            complete = False
+        if not disposition:
+            result.failures.append(f"residual risk '{risk}' has no human disposition")
+            complete = False
+        if blocking == "yes" and value == "Approved":
+            result.failures.append(
+                f"residual risk '{risk}' is blocking, which contradicts a plain Approved decision — resolve it, own it as a non-blocking condition under Approved with Conditions, or use Changes Required"
+            )
+            complete = False
+    if complete:
+        result.passes.append(f"all {len(rows)} residual risk(s) have blocking status and a human disposition consistent with the decision")
 
 
 def latest_verdict(ledger: Ledger) -> str:
