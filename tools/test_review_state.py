@@ -394,6 +394,42 @@ class ReviewStateTests(unittest.TestCase):
         self.assertNotEqual(code, 0)
         self.assertIn("revised SDD file is empty", buffer.getvalue())
 
+    def test_gated_concurrence_rejects_waiver_phrases(self) -> None:
+        self._formal_setup(
+            "UT-099",
+            "| OD-01 | register | Security/Privacy concurrence needed | Architect + Security | concurrence | Approach? | link |",
+        )
+        self._decision("UT-099", "Returned to the author as required change 1", "Waived by me as the reviewing architect")
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.preflight_decision("UT-099")
+        self.assertNotEqual(code, 0)
+        self.assertIn("self-waiver", buffer.getvalue())
+
+    def test_gated_concurrence_warns_when_no_authority_named(self) -> None:
+        self._formal_setup(
+            "UT-100",
+            "| OD-01 | register | requirement-owner confirmation needed | Architect + owner | confirmation | Threshold? | link |",
+        )
+        self._decision("UT-100", "Returned to the author as required change 1", "confirmed verbally")
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            review_state.preflight_decision("UT-100")
+        self.assertIn("no recognizable authority", buffer.getvalue())
+
+    def test_gated_concurrence_accepts_named_authority(self) -> None:
+        self._formal_setup(
+            "UT-101",
+            "| OD-01 | register | Security/Privacy concurrence needed | Architect + Security | concurrence | Approach? | link |",
+        )
+        self._decision("UT-101", "Returned to the author as required change 1", "Written concurrence from M. Osei, Head of Security & Privacy")
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            review_state.preflight_decision("UT-101")
+        out = buffer.getvalue()
+        self.assertNotIn("self-waiver", out)
+        self.assertNotIn("no recognizable authority", out)
+
 
 if __name__ == "__main__":
     unittest.main()

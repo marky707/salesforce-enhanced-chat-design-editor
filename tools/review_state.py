@@ -585,26 +585,44 @@ def preflight_decision(review_id: str) -> int:
             if not block:
                 result.failures.append(f"decision record has no disposition block for {item}")
                 continue
+            state = index_states.get(item, "").lower()
+            gated = "concurrence needed" in state or "confirmation needed" in state
             if not filled_field(block, "Selected option / disposition (human)"):
                 result.failures.append(f"{item} has no human-selected disposition")
             if not filled_field(block, "Reviewer rationale (human)"):
                 result.failures.append(f"{item} has no human reviewer rationale")
             if not filled_field(block, "Required concurrence and evidence (human)"):
-                result.failures.append(f"{item} has no concurrence/evidence disposition (use an explicit 'none required' when applicable)")
+                if gated:
+                    result.failures.append(
+                        f"{item} has no concurrence/evidence disposition — this state requires a named authority and evidence, or return the item"
+                    )
+                else:
+                    result.failures.append(
+                        f"{item} has no concurrence/evidence disposition (use an explicit 'none required' when applicable)"
+                    )
             if not filled_field(block, "Blocking? (human)"):
                 result.failures.append(f"{item} has no blocking-status disposition")
-            state = index_states.get(item, "").lower()
             if "content missing" in state:
                 disposition = block_field(block, "Selected option / disposition (human)").lower()
                 if not re.search(r"required change|returned?\b|defer", disposition):
                     result.failures.append(
                         f"{item} is `content missing` and cannot be approved — the artifact to approve does not exist; disposition it as a required change or an owned deferral"
                     )
-            if "concurrence needed" in state or "confirmation needed" in state:
-                concurrence = block_field(block, "Required concurrence and evidence (human)").lower()
-                if re.match(r"^(none\b|n/?a\b|not required|no concurrence)", concurrence):
+            if gated:
+                concurrence_raw = block_field(block, "Required concurrence and evidence (human)")
+                concurrence = concurrence_raw.lower()
+                if re.match(r"^(none\b|n/?a\b|not required|no concurrence)", concurrence) or re.search(
+                    r"\bwaiv|\barchitect only\b|\bself[- ]approv|\bnot needed\b|\bskip\b", concurrence
+                ):
                     result.failures.append(
-                        f"{item} requires an external authority ({index_states[item]}); a 'none required' self-waiver is not a valid concurrence disposition — name the evidence or return the item"
+                        f"{item} requires an external authority ({index_states[item]}); a self-waiver is not a valid concurrence disposition — name the authority and evidence, or return the item"
+                    )
+                elif concurrence_raw and not re.search(
+                    r"owner|security|privacy|legal|operations|product|compliance|governance|written|signed|concurrence from|[A-Z]\. ?[A-Z][a-z]",
+                    concurrence_raw,
+                ):
+                    result.warnings.append(
+                        f"{item} concurrence names no recognizable authority or evidence ('{concurrence_raw}'); confirm a named authority and written evidence are recorded"
                     )
         if not any(any(item in failure for item in index_ids) for failure in result.failures):
             result.passes.append("every authoritative decision ID has a structured, state-consistent human disposition")
