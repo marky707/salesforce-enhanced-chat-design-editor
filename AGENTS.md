@@ -19,12 +19,32 @@ A critic-only ICM pipeline that readies Salesforce Enhanced Chat v1 (formerly Me
 1. Read the root `CONTEXT.md` first.
 2. Identify the review ID named by the user. Exactly one active ledger in `reviews/` and no ID named → use it. Multiple active → ask which. A package in `01_intake/input/` with no ledger is a **new submission**: `01_intake/CONTEXT.md` says how to assign its ID and create its ledger.
 3. Determine the current stage from the **latest row of `reviews/<ID>-routing-log.md`**, not from folder contents.
-4. Read only the current stage's `CONTEXT.md` and the files it routes to.
+4. Dispatch using the routing table below: read the current stage's `CONTEXT.md` and only the files it routes to.
 5. Perform that stage's one job; write its versioned output to `output/<ID>/`.
 6. Evaluate the stage's explicit transition rule.
-7. If the transition is objective: copy the package subfolder into the next stage's `input/`, append a ledger row, continue.
+7. If the transition is objective: copy the package subfolder into the next stage's `input/`, append a ledger row, and dispatch again from the table.
 8. Stop at a human-controlled action (`03`, `05`), an intake error, an ambiguous state, or `06`.
 9. Report what was produced, where the package stopped, why, and the exact next human action.
+
+## Routing table
+
+Given the latest ledger row (or triggering event), route the package and read the destination's `CONTEXT.md` — it defines the job to perform there. This table dispatches; the stage contracts govern.
+
+| When (state / event) | Route package to | Then read | Stop? |
+|---|---|---|---|
+| New submission in `01_intake/input/<ID>/`, no ledger | stays in `01_intake` (create ledger) | `01_intake/CONTEXT.md` | no — validate |
+| Intake **complete** | `02_editor-review/input/<ID>/` | `02_editor-review/CONTEXT.md` | no — review |
+| Intake **incomplete** | stays in `01_intake` | — | **STOP** — author supplies missing items |
+| Verdict `Revise Before Formal Review` or `Insufficient Context` | `03_author-revision/input/<ID>/` | `03_author-revision/CONTEXT.md` | **STOP** — author revises |
+| Verdict `Ready for Formal Review` (with or without Open Decisions) | `05_formal-review/input/<ID>/` | `05_formal-review/CONTEXT.md` | **STOP** — human decision |
+| Author submitted package in `04_revision-intake/input/<ID>/` | stays in `04_revision-intake` | `04_revision-intake/CONTEXT.md` | no — validate |
+| Revision intake **complete** | `02_editor-review/input/<ID>/` (round +1) | `02_editor-review/CONTEXT.md` | no — review |
+| Revision intake **incomplete** | `03_author-revision/input/<ID>/` (errors report) | — | **STOP** — author fixes resubmission |
+| Formal decision `Approved` (valid human record) | `06_completed/input/<ID>/` | `06_completed/CONTEXT.md` | terminal after manifest |
+| Formal decision `Approved with Conditions` | per `05_formal-review/CONTEXT.md` condition rule | `05_formal-review/CONTEXT.md` | waits unless all non-blocking |
+| Formal decision `Changes Required` | `03_author-revision/input/<ID>/` | — | **STOP** — author revises |
+| Latest row `To stage` = `06_completed`, manifest written | nowhere — terminal | — | **STOP** |
+| Ambiguous / contradictory state | nowhere — write state-error report to current stage `output/<ID>/` | — | **STOP** — human reconciles |
 
 ## Invariants — never break these
 
