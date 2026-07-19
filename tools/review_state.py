@@ -748,7 +748,15 @@ def render_status(ledger: Ledger) -> str:
             ]
         )
         if decision_index:
-            lines.append(f"2. Disposition every item in [{decision_index.name}](../05_formal-review/input/{review_id}/{decision_index.name})")
+            open_count = len(decision_index_states(review_id, numeric_round(row["round"])))
+            if open_count:
+                lines.append(
+                    f"2. Disposition every item ({open_count}) in [{decision_index.name}](../05_formal-review/input/{review_id}/{decision_index.name})"
+                )
+            else:
+                lines.append(
+                    f"2. No open decisions remain ([index](../05_formal-review/input/{review_id}/{decision_index.name})) — select a decision, disposition the residual risks, provide your rationale, and sign"
+                )
             lines.append(f"3. Say `continue {review_id}` — the agent validates the decision before advancing")
         else:
             lines.append("2. Review the current design, open decisions, and residual risks")
