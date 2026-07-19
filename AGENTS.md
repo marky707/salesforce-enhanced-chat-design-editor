@@ -1,0 +1,50 @@
+# AGENTS.md — Canonical Agent Instructions
+
+Instructions for Codex, Claude Code, and future maintainers operating this repository. Human readers start at `README.md`.
+
+## What this repository is
+
+A critic-only ICM pipeline that readies Salesforce Enhanced Chat v1 (formerly Messaging for In-App and Web) and Omni-Channel Solution Design Documents for formal architecture review. The editor identifies weaknesses and returns them to the author. It never rewrites, never generates missing content, and never approves architecture.
+
+## Repository map
+
+- `CONTEXT.md` — the pipeline in one screen: stages, conventions, human stops. **Read this first.**
+- `01_intake/` … `06_completed/` — the six pipeline stages. Each has its own `CONTEXT.md` contract.
+- `02_editor-review/` — pipeline stage **and** the portable five-part editor (identity, rules, examples, reference/, README).
+- `reviews/` — one append-only routing ledger per review ID. Authoritative workflow state.
+- `fixtures/northstar/` — fictional demo package for testing and demonstration. Never a live review.
+
+## Operating sequence
+
+1. Read the root `CONTEXT.md` first.
+2. Identify the review ID named by the user. Exactly one active ledger in `reviews/` and no ID named → use it. Multiple active → ask which. A package in `01_intake/input/` with no ledger is a **new submission**: `01_intake/CONTEXT.md` says how to assign its ID and create its ledger.
+3. Determine the current stage from the **latest row of `reviews/<ID>-routing-log.md`**, not from folder contents.
+4. Read only the current stage's `CONTEXT.md` and the files it routes to.
+5. Perform that stage's one job; write its versioned output to `output/<ID>/`.
+6. Evaluate the stage's explicit transition rule.
+7. If the transition is objective: copy the package subfolder into the next stage's `input/`, append a ledger row, continue.
+8. Stop at a human-controlled action (`03`, `05`), an intake error, an ambiguous state, or `06`.
+9. Report what was produced, where the package stopped, why, and the exact next human action.
+
+## Invariants — never break these
+
+- **Critique only.** The editor never writes replacement design content, generates diagrams, or completes a design — in any stage, for any reason, including "the author asked."
+- **Approval is human.** Never infer, create, or simulate a formal decision. Document readiness ≠ architecture approval. `06_completed/` rejects packages lacking a human-authored decision record.
+- **History is preserved.** Copy forward; never delete or overwrite prior rounds, outputs, or ledger rows.
+- **No guessing.** Ambiguous or contradictory state → state-error report, stop, preserve evidence.
+- **Scope is settled.** Enhanced Chat v1 + Omni-Channel only. No CTI, no Enhanced Chat v2, no other messaging channels, no code review. Do not widen scope during maintenance.
+- **Fixtures stay fictional.** `fixtures/` content never enters `reviews/` or stage folders except when a user explicitly starts a demo run, and demo ledgers must be labeled as demos.
+
+## Validation expectations
+
+Before publishing changes, verify against `fixtures/northstar/`: run the demo package through intake and editor review; the output must resemble `fixtures/northstar/expected-review-round-01.md` in form — verdict, ≤5 anchored findings, consequences, author tasks, no rewritten content. The eight acceptance routes are listed in `CONTEXT.md` stage table and tested in the fixture README.
+
+## File-size guidance
+
+CONTEXT files ≈ one screen (~50 lines); reference files ≈ a few hundred lines. These are targets, not caps — a file outgrowing its target is a signal to split it by job.
+
+## Contracts
+
+- Editor behavior: `02_editor-review/rules.md` (most important file in the project)
+- Workflow routing: root `CONTEXT.md` + each stage's `CONTEXT.md`
+- Ledger format: `reviews/README.md`

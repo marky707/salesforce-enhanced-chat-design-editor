@@ -1,0 +1,34 @@
+# Intake Manifest — <REVIEW-ID>
+
+<!-- Stable template: contains no run-specific facts. Fill a copy in output/<ID>/. -->
+
+- **Review ID:**
+- **Document title:**
+- **Document version:**
+- **Review round:** 01
+- **Submitted by (human actor):**
+- **Date (ISO 8601):**
+- **Scope confirmed:** Enhanced Chat v1 + Omni-Channel — new implementation / Legacy Chat migration (circle one)
+
+## Package inventory
+
+| Item | Present | Path | Notes |
+|---|---|---|---|
+| Draft SDD (readable) | yes/no | | |
+| Requirements list | yes/no | | |
+| Assumptions & open decisions | yes/no | | |
+| Diagrams supplied | yes/no/partial | | List which of the six standard diagrams appear |
+| Referenced files available | yes/no/n-a | | Unexplained unavailable references fail intake |
+
+## Known absences passed through for critique
+
+<!-- Missing content that does NOT fail intake (e.g. a missing diagram) — record it so the editor sees it. -->
+
+-
+
+## Intake result
+
+- **Status:** complete / incomplete
+- **Next stage:** 02_editor-review / remains in 01_intake
+- **Reason:**
+- **Errors report:** none / `<ID>-intake-errors.md`
