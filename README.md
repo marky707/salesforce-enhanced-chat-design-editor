@@ -16,7 +16,7 @@ The editor packages senior architecture judgment as a **critic, not a co-author*
 
 **Option A — full pipeline (Codex or Claude Code in this repo):**
 
-1. Put your draft SDD, requirements, assumptions/open decisions, and diagrams in `01_intake/input/<ID>/` (pick an ID like `AC-001`, or let the agent assign one) — **or simply attach the files in chat** and say what they are; the agent files them into the correct stage folder for you and confirms where they went. Same for revisions later.
+1. Put your draft SDD, requirements, assumptions/open decisions, and diagrams in `01_intake/input/<ID>/` (pick an ID like `AC-001`, or let the agent assign one) — **or simply attach the files in chat** and say what they are; the agent files them into the correct stage folder for you and confirms where they went. Same for revisions later. Formats: markdown, plain text, PDF, or Word — `.docx` files are converted automatically at intake (the original is kept as the source of record).
 2. Say: *"Start a new review from 01_intake/input/. Assign a review ID if one is not already declared, process every eligible automatic transition, and stop at the next required human action."*
 3. For an existing review: *"Run the workflow for review ID `<ID>` from its current stage. Follow the routing contracts, complete every eligible automatic transition, preserve prior rounds, and stop at the next required human action or completed state."*
 
@@ -40,9 +40,10 @@ The editor packages senior architecture judgment as a **critic, not a co-author*
 - **What the editor returns:** a verdict (`Revise Before Formal Review`, `Ready for Formal Review with Open Decisions`, `Ready for Formal Review`, or `Insufficient Context`) plus at most five prioritized findings, each anchored to an exact passage with its consequence and a question for you to resolve.
 - **"Ready for Formal Review" means** the document is coherent enough for a human architecture review. It is **not** architecture approval — that decision belongs to the accountable human reviewer in `05_formal-review/`.
 - **The workflow stops for people twice:** at `03_author-revision/` (you revise and deliberately resubmit) and at `05_formal-review/` (a human records the decision). Everything else advances automatically during an invoked run.
-- **To revise and rerun:** answer every finding in the response log template, place the revised SDD and log in `04_revision-intake/input/<ID>/`, and invoke the workflow again. Each rerun is a new numbered round.
+- **To revise and rerun:** your review packet arrives with a **pre-filled response form** — one block per finding; mark each one resolved / partially resolved / disagree, say where the design changed, and explain in your own words (disagreeing is allowed when argued from a requirement). Place the revised SDD (new version in the filename) and the completed form in `04_revision-intake/input/<ID>/` — or attach both in chat — and invoke the workflow again. Each rerun is a new numbered round.
+- **Converge faster:** the review's *Deferred Review Areas* section previews likely future findings — addressing those items in the same revision usually saves a full round. If you change a supporting artifact (requirements, assumptions), version its filename and re-read it against your SDD before submitting; intake cross-checks the package and bounces contradictions.
 - **History is preserved:** packages advance by copying forward; every draft, review round, response log, and decision stays where it was written, and `reviews/<ID>-routing-log.md` records every transition.
 
 ## Repository layout
 
-Six numbered stage folders (each with a `CONTEXT.md` contract and per-review `input/`/`output/` subfolders), the portable editor inside `02_editor-review/`, routing ledgers in `reviews/`, and a fictional demo package in `fixtures/northstar/`. Agents and maintainers: read `AGENTS.md` and the root `CONTEXT.md`.
+Six numbered stage folders (each with a `CONTEXT.md` contract and per-review `input/`/`output/` subfolders), the portable editor inside `02_editor-review/`, routing ledgers in `reviews/` (the authoritative record of where every review stands), a fictional demo package in `fixtures/northstar/`, and `tools/` (the Word-to-markdown converter intake uses). Agents and maintainers: read `AGENTS.md` and the root `CONTEXT.md`.

@@ -40,7 +40,9 @@ Exactly the contract in `rules.md`:
 
 - A **verdict** — `Revise Before Formal Review`, `Ready for Formal Review with Open Decisions`, `Ready for Formal Review`, or `Insufficient Context`
 - **At most five findings**, each with severity, lens (Why/Flow/Failure/Proof), exact location, quoted evidence, the design gap, its consequence, and a focused task for you
-- **Open decisions** needing senior human judgment, and **deferred areas** it will review once the big problems are fixed
+- **Open decisions** needing senior human judgment, and **deferred areas** — specific lower-priority items it will otherwise raise in later rounds; treating them as a to-do list alongside the findings usually saves you a round
+
+The editor's goal is a **ready verdict, not endless critique**: once your revisions resolve the material gaps, remaining judgment calls travel forward to your human reviewers as open decisions — `Ready for Formal Review with Open Decisions` is a normal, successful outcome.
 
 Compact example finding:
 
@@ -55,4 +57,4 @@ You are the architect. The editor's value is exposing what a formal review board
 - Scope: Enhanced Chat v1 + Omni-Channel only. No Legacy Chat design (except as migration source), no Enhanced Chat v2, no CTI/Amazon Connect, no WhatsApp/SMS/Facebook Messenger, no generic Salesforce review, no code review.
 - **"Ready for Formal Review" is document readiness, not approval.** Approval belongs to your accountable human architect and governance reviewers.
 - It won't certify security or compliance, and it won't speak for Salesforce behavior beyond well-established platform behavior — unverifiable claims in your draft get flagged, not corrected.
-- Five findings per pass, by design. Fix the big ones; rerun; the next tier surfaces.
+- Five findings per pass, by design. Fix the big ones; rerun; the next tier surfaces — and the *Deferred Review Areas* list tells you in advance what that next tier is.
