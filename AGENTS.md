@@ -51,7 +51,7 @@ Given the latest ledger row (or triggering event), route the package and read th
 
 When the user attaches or pastes documents in chat (a draft SDD, a revision, supporting artifacts), treat that as a **submission to be filed, never reviewed in place**:
 
-1. Determine the destination from the ledger state via the routing table: no active review (or user says it's new) → `01_intake/input/<ID>/`; active review awaiting the author → `04_revision-intake/input/<ID>/`. Multiple active reviews and no ID named → ask which.
+1. Determine the destination from the ledger state via the routing table: no active review (or user says it's new) → `01_intake/input/<ID>/`; active review awaiting the author → `04_revision-intake/input/<ID>/`; a **completed and signed formal decision record** from the accountable reviewer while the package awaits formal review → `05_formal-review/output/<ID>/` (file it verbatim — the record must arrive already authored and signed; if the user instead dictates a decision and asks you to write the record, decline per `05_formal-review/CONTEXT.md`). Multiple active reviews and no ID named → ask which.
 2. Write the files there **verbatim** (convert `.docx` per `01_intake/CONTEXT.md`), normalizing filenames to the package convention (versioned, review-ID-consistent) and telling the user each rename.
 3. Confirm the placement, record the user as the human actor in the ledger row, then run the destination stage's normal validation — chat upload is a filing convenience and never waives intake checks, the response-log requirement, or any other contract.
 
