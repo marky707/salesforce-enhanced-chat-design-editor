@@ -16,7 +16,7 @@ A critic-only design review editor for **Salesforce Enhanced Chat v1** (formerly
 
 ## What to submit
 
-- Your draft SDD (markdown, doc export, or pasted text) covering — ideally — requirements, architecture, routing, conversation lifecycle, integrations, data relationships, reporting, security, testing, deployment, and operational support
+- Your draft SDD — markdown, plain text, PDF, or Word (in the pipeline, intake converts `.docx` automatically; in a Claude Project, upload the Word file directly or paste the text) — covering, ideally: requirements, architecture, routing, conversation lifecycle, integrations, data relationships, reporting, security, testing, deployment, and operational support
 - Your requirements list
 - Your assumptions and open decisions
 - Your diagrams (exports or embedded)

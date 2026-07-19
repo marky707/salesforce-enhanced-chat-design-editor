@@ -10,6 +10,8 @@
 - Available diagrams (embedded or as files)
 - Any supporting references the draft cites
 
+**Accepted formats:** markdown, plain text, PDF — or Word (`.docx`). A `.docx` is converted during intake, before validation: run `python3 tools/docx_to_md.py <file>.docx <file>.md` into the same `input/<ID>/` folder, keep the original `.docx` as the source of record, and note the conversion in the manifest. The converted markdown is what downstream stages review. If the converter reports embedded images, record in the manifest that those diagrams need separate image exports (their absence passes through as an editor finding, as usual). Conversion is administrative — it never alters wording.
+
 ## Output (`output/<ID>/`)
 
 - `<ID>-intake-manifest.md` (from `intake-manifest-template.md`), always

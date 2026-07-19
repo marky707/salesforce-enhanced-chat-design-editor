@@ -13,6 +13,7 @@ A critic-only ICM pipeline that readies Salesforce Enhanced Chat v1 (formerly Me
 - `02_editor-review/` — pipeline stage **and** the portable five-part editor (identity, rules, examples, reference/, README).
 - `reviews/` — one append-only routing ledger per review ID. Authoritative workflow state.
 - `fixtures/northstar/` — fictional demo package for testing and demonstration. Never a live review.
+- `tools/docx_to_md.py` — stdlib-only Word→markdown converter, run by intake when a `.docx` is submitted.
 
 ## Operating sequence
 
