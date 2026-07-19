@@ -1,0 +1,6 @@
+.DS_Store
+# Run-specific review artifacts stay local; the published repo ships the build only.
+0*/input/*/
+0*/output/*/
+reviews/*
+!reviews/README.md
