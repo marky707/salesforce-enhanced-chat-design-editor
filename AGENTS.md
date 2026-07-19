@@ -34,7 +34,7 @@ Users may drive the workflow with these short commands (any phrasing that clearl
 
 | Verb | What the agent does |
 |---|---|
-| `start` | New package: assign/confirm ID, file any chat-attached documents, create the ledger + status card, run intake, continue to the next human stop |
+| `start` | New package: assign/confirm ID, file any chat-attached documents, **run start preflight automatically** (on failure, report what's missing and create no state), then create the ledger + status card, run intake, continue to the next human stop |
 | `continue <ID>` | Resume from the ledger state; complete every eligible automatic transition; stop at the next human action |
 | `status <ID>` | Inspect the ledger **and human drop zones**, regenerate the filesystem-aware status card, and show it without advancing state |
 | `preflight start <ID>` | Inspect a new package and ID availability without creating a ledger |
