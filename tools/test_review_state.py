@@ -445,6 +445,7 @@ class ReviewStateTests(unittest.TestCase):
             "# Formal Architecture Review Decision — UT-102 — Round 04\n\n"
             "- **Review ID:** UT-102\n\n"
             "## Decision\n\n`Approved`\n\n"
+            "## Residual risk dispositions\n\nNone — no residual risks identified for this round.\n\n"
             "## Signature\n\n"
             "- **Accountable reviewer (human actor):** A. Human\n"
             "- **Role:** Senior Architect\n"
@@ -546,6 +547,66 @@ class ReviewStateTests(unittest.TestCase):
             code = review_state.preflight_decision("UT-105")
         self.assertNotEqual(code, 0)
         self.assertIn("contradicts a plain Approved decision", buffer.getvalue())
+
+    def test_approved_without_residual_section_fails(self) -> None:
+        self._formal_setup(
+            "UT-106",
+            "| OD-01 | register | ready for architect disposition | Architect | none | Choice? | link |",
+        )
+        self.write(
+            "05_formal-review/output/UT-106/UT-106-formal-decision-round-02.md",
+            "# Formal Architecture Review Decision — UT-106 — Round 02\n\n"
+            "- **Review ID:** UT-106\n\n"
+            "## Decision\n\n`Approved`\n\n"
+            "### OD-01 — Sample decision\n\n"
+            "- **Selected option / disposition (human):** Option A selected\n"
+            "- **Reviewer rationale (human):** Sound.\n"
+            "- **Required concurrence and evidence (human):** none required\n"
+            "- **Blocking? (human):** no\n\n"
+            "## Signature\n\n"
+            "- **Accountable reviewer (human actor):** A. Human\n"
+            "- **Role:** Senior Architect\n"
+            "- **Date signed (ISO 8601):** 2026-07-19\n",
+        )
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.preflight_decision("UT-106")
+        self.assertNotEqual(code, 0)
+        self.assertIn("must include the 'Residual risk dispositions' section", buffer.getvalue())
+
+    def test_residual_rows_require_owner_evidence_gate(self) -> None:
+        self._formal_setup(
+            "UT-107",
+            "| OD-01 | register | ready for architect disposition | Architect | none | Choice? | link |",
+        )
+        self.write(
+            "05_formal-review/output/UT-107/UT-107-formal-decision-round-02.md",
+            "# Formal Architecture Review Decision — UT-107 — Round 02\n\n"
+            "- **Review ID:** UT-107\n\n"
+            "## Decision\n\n`Changes Required`\n\n"
+            "### OD-01 — Sample decision\n\n"
+            "- **Selected option / disposition (human):** Returned to the author\n"
+            "- **Reviewer rationale (human):** Needs work.\n"
+            "- **Required concurrence and evidence (human):** none required\n"
+            "- **Blocking? (human):** yes\n\n"
+            "## Required changes (only for Changes Required)\n\n- 1. Fix it.\n\n"
+            "## Residual risk dispositions\n\n"
+            "| Risk | Owner | Required evidence | Due gate | Blocking? | Human disposition |\n"
+            "|---|---|---|---|---|---|\n"
+            "| Data retention | | | | no | Tracked |\n\n"
+            "## Signature\n\n"
+            "- **Accountable reviewer (human actor):** A. Human\n"
+            "- **Role:** Senior Architect\n"
+            "- **Date signed (ISO 8601):** 2026-07-19\n",
+        )
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.preflight_decision("UT-107")
+        out = buffer.getvalue()
+        self.assertNotEqual(code, 0)
+        self.assertIn("has no owner", out)
+        self.assertIn("has no required evidence", out)
+        self.assertIn("has no due gate", out)
 
 
 if __name__ == "__main__":

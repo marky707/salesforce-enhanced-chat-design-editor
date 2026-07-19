@@ -663,9 +663,14 @@ def preflight_decision(review_id: str) -> int:
 
 
 def check_residual_risks(text: str, value: str | None, result: "CheckResult") -> None:
-    """Machine-enforce the residual-risk table: named rows need blocking status and a human disposition."""
+    """Machine-enforce the residual-risk table: an Approved* decision must carry rows or an explicit none-attestation, and named rows need owner, evidence, due gate, blocking status, and a human disposition."""
+    approvedish = value in {"Approved", "Approved with Conditions"}
     section = re.search(r"^## Residual risk dispositions.*?(?=^## |\Z)", text, re.M | re.S | re.I)
     if not section:
+        if approvedish:
+            result.failures.append(
+                "an Approved decision must include the 'Residual risk dispositions' section — with rows, or an explicit 'None' attestation; omitting it skips accountable ownership"
+            )
         return
     rows = []
     for line in section.group(0).splitlines():
@@ -673,10 +678,23 @@ def check_residual_risks(text: str, value: str | None, result: "CheckResult") ->
         if len(cells) >= 6 and cells[0] and cells[0].lower() not in {"risk", "---"} and not set(cells[0]) <= {"-"}:
             rows.append(cells)
     if not rows:
+        if approvedish:
+            if re.search(r"\bnone\b|\bno residual", section.group(0), re.I):
+                result.passes.append("residual risks explicitly attested as none for this round")
+            else:
+                result.failures.append(
+                    "an Approved decision has an empty residual-risk table and no explicit 'None' attestation"
+                )
         return
     complete = True
     for cells in rows:
-        risk, blocking, disposition = cells[0], cells[4].strip().lower(), cells[5].strip()
+        risk = cells[0]
+        owner, evidence, gate = cells[1].strip(), cells[2].strip(), cells[3].strip()
+        blocking, disposition = cells[4].strip().lower(), cells[5].strip()
+        for label, field in (("owner", owner), ("required evidence", evidence), ("due gate", gate)):
+            if not field:
+                result.failures.append(f"residual risk '{risk}' has no {label}")
+                complete = False
         if blocking not in {"yes", "no"}:
             result.failures.append(f"residual risk '{risk}' has no explicit yes/no blocking status")
             complete = False
@@ -689,7 +707,9 @@ def check_residual_risks(text: str, value: str | None, result: "CheckResult") ->
             )
             complete = False
     if complete:
-        result.passes.append(f"all {len(rows)} residual risk(s) have blocking status and a human disposition consistent with the decision")
+        result.passes.append(
+            f"all {len(rows)} residual risk(s) are owned, evidenced, gated, and dispositioned consistently with the decision"
+        )
 
 
 def latest_verdict(ledger: Ledger) -> str:
