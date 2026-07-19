@@ -430,6 +430,34 @@ class ReviewStateTests(unittest.TestCase):
         self.assertNotIn("self-waiver", out)
         self.assertNotIn("no recognizable authority", out)
 
+    def test_empty_decision_index_is_valid_for_round_decision(self) -> None:
+        self.ledger(
+            "UT-102",
+            "| 2026-07-19 | 04 | v4 | 02_editor-review | 05_formal-review | Ready for Formal Review | clean | review.md | — |",
+        )
+        self.write(
+            "05_formal-review/input/UT-102/UT-102-open-decision-index-round-04.md",
+            "| ID | Source | State | Required authority | Missing evidence | Question | Link |\n"
+            "|---|---|---|---|---|---|---|\n",
+        )
+        self.write(
+            "05_formal-review/output/UT-102/UT-102-formal-decision-round-04.md",
+            "# Formal Architecture Review Decision — UT-102 — Round 04\n\n"
+            "- **Review ID:** UT-102\n\n"
+            "## Decision\n\n`Approved`\n\n"
+            "## Signature\n\n"
+            "- **Accountable reviewer (human actor):** A. Human\n"
+            "- **Role:** Senior Architect\n"
+            "- **Date signed (ISO 8601):** 2026-07-19\n",
+        )
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.preflight_decision("UT-102")
+        out = buffer.getvalue()
+        self.assertNotIn("none found", out)
+        self.assertIn("zero open decisions", out)
+        self.assertEqual(code, 0)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -576,6 +576,7 @@ def preflight_decision(review_id: str) -> int:
         result.failures.append("decision metadata is missing the exact review ID")
     if path == legacy:
         result.warnings.append("legacy unversioned decision filename detected; new formal rounds use round-versioned records")
+    index_path = existing_formal_artifact(review_id, round_number, "index")
     index_states = decision_index_states(review_id, round_number)
     index_ids = list(index_states)
     if index_ids:
@@ -626,6 +627,8 @@ def preflight_decision(review_id: str) -> int:
                     )
         if not any(any(item in failure for item in index_ids) for failure in result.failures):
             result.passes.append("every authoritative decision ID has a structured, state-consistent human disposition")
+    elif index_path:
+        result.passes.append("authoritative decision index is present with zero open decisions for this round")
     elif path == legacy:
         result.warnings.append("no authoritative open-decision index found; legacy decision validation is less complete")
     else:
