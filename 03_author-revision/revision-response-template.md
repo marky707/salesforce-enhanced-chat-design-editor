@@ -18,6 +18,8 @@ Do this **after** you've finished revising. Every finding must have a block, inc
 
 **Tip:** the review's *Deferred Review Areas* section is a preview of likely future findings. Addressing those items in this same revision usually saves you a full review round — note anything you tackled under "New material introduced this round."
 
+**If you changed a supporting artifact** (requirements list, assumptions/decisions register): give it a new versioned filename, list it under "New material introduced this round," and **re-read it once against your revised SDD before submitting** — the most common resubmission failure is a supporting artifact that quietly disagrees with the SDD or with this log (e.g. text pasted from the wrong document, or a register still calling "open" a decision your SDD closed). Revision intake cross-checks all three and will bounce a contradictory package.
+
 - **Review ID:**
 - **Responding to:** `<ID>-review-round-<NN>.md`
 - **Revised document version:**
