@@ -71,12 +71,11 @@
 
 ---
 
-**After signing — four steps, then you're done:**
+**After signing — three steps, then you're done:**
 
 1. Save this file as `<ID>-formal-decision-round-<NN>.md` in `05_formal-review/output/<ID>/`, using the current ledger round for `<NN>` (create the folder if needed, or attach the signed file in chat and ask the agent to file it).
-2. Run `preflight decision <ID>` (or ask the agent). Correct any missing decision IDs, concurrence, conditions, required changes, or signature fields.
-3. Tell the agent: *"I've recorded my formal decision for `<ID>`. Please continue the workflow."*
-4. Do **not** move anything into `06_completed/`; you are done only when status shows **Completed** or names the next author action.
+2. Tell the agent: *"I've recorded my formal decision for `<ID>`. Please continue the workflow."* The agent validates the record first and reports anything to correct — missing decision IDs, concurrence, conditions, required changes, or signature fields. (Power users can run the check themselves: see `tools/README.md`.)
+3. Do **not** move anything into `06_completed/`; you are done only when status shows **Completed** or names the next author action.
 
 ## Human completeness checklist
 

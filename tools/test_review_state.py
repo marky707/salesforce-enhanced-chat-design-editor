@@ -305,6 +305,95 @@ class ReviewStateTests(unittest.TestCase):
         self.assertIn("embedded diagram blocks detected", out)
         self.assertNotIn("no diagrams detected", out)
 
+    def _formal_setup(self, review_id: str, index_row: str) -> None:
+        self.ledger(
+            review_id,
+            "| 2026-07-19 | 02 | v2 | 02_editor-review | 05_formal-review | Ready for Formal Review with Open Decisions | decisions | review.md | — |",
+        )
+        self.write(
+            f"05_formal-review/input/{review_id}/{review_id}-open-decision-index-round-02.md",
+            "| ID | Source | State | Required authority | Missing evidence | Question | Link |\n"
+            "|---|---|---|---|---|---|---|\n" + index_row + "\n",
+        )
+
+    def _decision(self, review_id: str, disposition: str, concurrence: str) -> None:
+        self.write(
+            f"05_formal-review/output/{review_id}/{review_id}-formal-decision-round-02.md",
+            f"# Formal Architecture Review Decision — {review_id} — Round 02\n\n"
+            f"- **Review ID:** {review_id}\n\n"
+            "## Decision\n\n`Changes Required`\n\n"
+            "### OD-01 — Sample decision\n\n"
+            f"- **Selected option / disposition (human):** {disposition}\n"
+            "- **Reviewer rationale (human):** Because reasons stated by the human.\n"
+            f"- **Required concurrence and evidence (human):** {concurrence}\n"
+            "- **Blocking? (human):** yes\n\n"
+            "## Required changes (only for Changes Required)\n\n- 1. Do the thing.\n\n"
+            "## Signature\n\n"
+            "- **Accountable reviewer (human actor):** A. Human\n"
+            "- **Role:** Senior Architect\n"
+            "- **Date signed (ISO 8601):** 2026-07-19\n",
+        )
+
+    def test_content_missing_decision_cannot_be_approved(self) -> None:
+        self._formal_setup(
+            "UT-094",
+            "| OD-01 | register | content missing | Architect | wording draft | Approve wording? | link |",
+        )
+        self._decision("UT-094", "Approve the wording as drafted", "E-commerce owner confirmation")
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.preflight_decision("UT-094")
+        self.assertNotEqual(code, 0)
+        self.assertIn("cannot be approved", buffer.getvalue())
+
+    def test_content_missing_accepts_required_change_disposition(self) -> None:
+        self._formal_setup(
+            "UT-095",
+            "| OD-01 | register | content missing | Architect | wording draft | Approve wording? | link |",
+        )
+        self._decision("UT-095", "Returned to the author as required change 1", "E-commerce owner confirmation once drafted")
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            review_state.preflight_decision("UT-095")
+        self.assertNotIn("cannot be approved", buffer.getvalue())
+
+    def test_gated_concurrence_rejects_self_waiver(self) -> None:
+        self._formal_setup(
+            "UT-096",
+            "| OD-01 | register | Security/Privacy concurrence needed | Architect + Security | concurrence | Approach? | link |",
+        )
+        self._decision("UT-096", "Returned to the author as required change 1", "None required")
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.preflight_decision("UT-096")
+        self.assertNotEqual(code, 0)
+        self.assertIn("self-waiver", buffer.getvalue())
+
+    def test_round_versioned_decision_requires_index(self) -> None:
+        self.ledger(
+            "UT-097",
+            "| 2026-07-19 | 02 | v2 | 02_editor-review | 05_formal-review | Ready for Formal Review with Open Decisions | decisions | review.md | — |",
+        )
+        self._decision("UT-097", "Returned to the author", "Named evidence")
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.preflight_decision("UT-097")
+        self.assertNotEqual(code, 0)
+        self.assertIn("requires the authoritative open-decision index", buffer.getvalue())
+
+    def test_preflight_revision_fails_on_empty_revised_sdd(self) -> None:
+        self.ledger(
+            "UT-098",
+            "| 2026-07-19 | 01 | v1 | 02_editor-review | 03_author-revision | Revise Before Formal Review | findings | review.md | — |",
+        )
+        self.write("04_revision-intake/input/UT-098/acme-sdd-draft-v2.md", "  \n")
+        self.write("04_revision-intake/input/UT-098/UT-098-revision-response-round-01.md", "# log")
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = review_state.preflight_revision("UT-098")
+        self.assertNotEqual(code, 0)
+        self.assertIn("revised SDD file is empty", buffer.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main()

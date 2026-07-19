@@ -373,6 +373,16 @@ def preflight_revision(review_id: str) -> int:
     new_sdds = [path for path in sdds if version_from_path(path) > current_version]
     if len(new_sdds) == 1:
         result.passes.append(f"new SDD version detected: {new_sdds[0].name}")
+        if new_sdds[0].suffix.lower() in {".md", ".txt"}:
+            revised_len = len(new_sdds[0].read_text(encoding="utf-8", errors="ignore").strip())
+            if revised_len == 0:
+                result.failures.append(f"revised SDD file is empty: {new_sdds[0].name}")
+            elif revised_len < 500:
+                result.warnings.append(
+                    f"revised SDD content is unusually small ({revised_len} characters); confirm this is the real revision"
+                )
+        elif new_sdds[0].stat().st_size == 0:
+            result.failures.append(f"revised SDD file is empty: {new_sdds[0].name}")
     elif not new_sdds:
         result.failures.append(f"no SDD version newer than {latest['doc_version']} detected")
     else:
@@ -473,17 +483,25 @@ def existing_formal_artifact(review_id: str, round_number: int, kind: str, outpu
 
 
 def decision_index_ids(review_id: str, round_number: int) -> list[str]:
+    return list(decision_index_states(review_id, round_number))
+
+
+def decision_index_states(review_id: str, round_number: int) -> dict[str, str]:
+    """Map each open-decision ID to its declared index state."""
     path = existing_formal_artifact(review_id, round_number, "index")
-    if not path:
-        return []
-    if not path.exists():
-        return []
-    ids = []
+    if not path or not path.exists():
+        return {}
+    states: dict[str, str] = {}
     for line in path.read_text(encoding="utf-8").splitlines():
         cells = split_table_row(line) if line.startswith("|") else []
         if cells and re.fullmatch(r"OD-(?:E)?\d+", cells[0], re.I):
-            ids.append(cells[0].upper())
-    return ids
+            states[cells[0].upper()] = cells[2].strip() if len(cells) > 2 else ""
+    return states
+
+
+def block_field(block: str, label: str) -> str:
+    match = re.search(rf"\*\*{re.escape(label)}:\*\*[ \t]*(.*)", block)
+    return match.group(1).strip() if match else ""
 
 
 def disposition_block(text: str, decision_id: str) -> str:
@@ -558,7 +576,8 @@ def preflight_decision(review_id: str) -> int:
         result.failures.append("decision metadata is missing the exact review ID")
     if path == legacy:
         result.warnings.append("legacy unversioned decision filename detected; new formal rounds use round-versioned records")
-    index_ids = decision_index_ids(review_id, round_number)
+    index_states = decision_index_states(review_id, round_number)
+    index_ids = list(index_states)
     if index_ids:
         result.passes.append(f"authoritative decision index contains {len(index_ids)} ID(s)")
         for item in index_ids:
@@ -574,10 +593,27 @@ def preflight_decision(review_id: str) -> int:
                 result.failures.append(f"{item} has no concurrence/evidence disposition (use an explicit 'none required' when applicable)")
             if not filled_field(block, "Blocking? (human)"):
                 result.failures.append(f"{item} has no blocking-status disposition")
+            state = index_states.get(item, "").lower()
+            if "content missing" in state:
+                disposition = block_field(block, "Selected option / disposition (human)").lower()
+                if not re.search(r"required change|returned?\b|defer", disposition):
+                    result.failures.append(
+                        f"{item} is `content missing` and cannot be approved — the artifact to approve does not exist; disposition it as a required change or an owned deferral"
+                    )
+            if "concurrence needed" in state or "confirmation needed" in state:
+                concurrence = block_field(block, "Required concurrence and evidence (human)").lower()
+                if re.match(r"^(none\b|n/?a\b|not required|no concurrence)", concurrence):
+                    result.failures.append(
+                        f"{item} requires an external authority ({index_states[item]}); a 'none required' self-waiver is not a valid concurrence disposition — name the evidence or return the item"
+                    )
         if not any(any(item in failure for item in index_ids) for failure in result.failures):
-            result.passes.append("every authoritative decision ID has a structured human disposition")
-    else:
+            result.passes.append("every authoritative decision ID has a structured, state-consistent human disposition")
+    elif path == legacy:
         result.warnings.append("no authoritative open-decision index found; legacy decision validation is less complete")
+    else:
+        result.failures.append(
+            "round-versioned decision record requires the authoritative open-decision index for its round; none found"
+        )
     if value == "Approved with Conditions":
         rows = condition_rows(text)
         if not rows:
@@ -868,7 +904,12 @@ def validate_state(review_id: str) -> int:
         if decision_index:
             result.passes.append(f"authoritative open-decision index exists: {decision_index.name}")
         else:
-            result.warnings.append("legacy formal packet has no generated open-decision index")
+            form_path = existing_formal_artifact(review_id, round_number, "form")
+            versioned_form_name = formal_artifact(review_id, round_number, "form")[0].name
+            if form_path and form_path.name == versioned_form_name:
+                result.failures.append("non-legacy formal packet is missing its authoritative open-decision index")
+            else:
+                result.warnings.append("legacy formal packet has no generated open-decision index")
     if row["to_stage"] != "06_completed":
         completed = ROOT / "06_completed" / "input" / review_id
         if completed.exists() and package_files(completed):
