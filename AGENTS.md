@@ -23,9 +23,20 @@ A critic-only ICM pipeline that readies Salesforce Enhanced Chat v1 (formerly Me
 4. Dispatch using the routing table below: read the current stage's `CONTEXT.md` and only the files it routes to.
 5. Perform that stage's one job; write its versioned output to `output/<ID>/`.
 6. Evaluate the stage's explicit transition rule.
-7. If the transition is objective: copy the package subfolder into the next stage's `input/`, append a ledger row, and dispatch again from the table.
+7. If the transition is objective: copy the package subfolder into the next stage's `input/`, append a ledger row, **regenerate `reviews/<ID>-status.md`** (format in `reviews/README.md`), and dispatch again from the table. During multi-stage runs, narrate progress briefly as each stage completes ("Intake complete → review in progress → routed to author revision").
 8. Stop at a human-controlled action (`03`, `05`), an intake error, an ambiguous state, or `06`.
-9. Report what was produced, where the package stopped, why, and the exact next human action.
+9. Report what was produced, where the package stopped, why, and the exact next human action — and point the human at the packet cover and status card, not at raw folders.
+
+## Operator verbs
+
+Users may drive the workflow with these short commands (any phrasing that clearly means the same thing counts):
+
+| Verb | What the agent does |
+|---|---|
+| `start` | New package: assign/confirm ID, file any chat-attached documents, create the ledger + status card, run intake, continue to the next human stop |
+| `continue <ID>` | Resume from the ledger state; complete every eligible automatic transition; stop at the next human action |
+| `status <ID>` | Regenerate and show the status card (no ID given + one active review → use it) |
+| `submit revision <ID>` | Validate the drop in `04_revision-intake/input/<ID>/` (or file chat-attached revision files there), append the submission ledger row with the human actor, continue |
 
 ## Routing table
 
@@ -61,6 +72,7 @@ Never critique an attached document directly in chat while skipping the pipeline
 - **Approval is human.** Never infer, create, or simulate a formal decision. Document readiness ≠ architecture approval. `06_completed/` rejects packages lacking a human-authored decision record.
 - **History is preserved.** Copy forward; never delete or overwrite prior rounds, outputs, or ledger rows.
 - **No guessing.** Ambiguous or contradictory state → state-error report, stop, preserve evidence.
+- **Fail loud on unsafe writes.** Refuse to write into a different review ID than the one being processed unless the user confirms; refuse to reuse an existing versioned filename for changed content; refuse to author or backfill Decision/Rationale/Signature content anywhere, ever.
 - **Scope is settled.** Enhanced Chat v1 + Omni-Channel only. No CTI, no Enhanced Chat v2, no other messaging channels, no code review. Do not widen scope during maintenance.
 - **Fixtures stay fictional.** `fixtures/` content never enters `reviews/` or stage folders except when a user explicitly starts a demo run, and demo ledgers must be labeled as demos.
 

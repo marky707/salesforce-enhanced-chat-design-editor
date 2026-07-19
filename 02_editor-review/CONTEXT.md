@@ -24,7 +24,18 @@ The persona and references load **only** in this stage. Leaving this stage, drop
 
 ## Routing
 
-- **`Revise Before Formal Review` or `Insufficient Context` →** copy the package plus the new review report to `03_author-revision/input/<ID>/`. Also generate `<ID>-revision-response-round-<NN>.md` there from `03_author-revision/revision-response-template.md`, pre-populated with one block per finding (number and title filled in; answer lines left blank — pre-filling titles is administrative, answering them is the author's). Append ledger row, stop (human stop follows).
+- **`Revise Before Formal Review` or `Insufficient Context` →** copy the package plus the new review report to `03_author-revision/input/<ID>/`. Also generate there:
+  1. `<ID>-revision-response-round-<NN>.md` from `03_author-revision/revision-response-template.md`, pre-populated with one block per finding (number and title filled in; answer lines left blank — pre-filling titles is administrative, answering them is the author's).
+  2. `<ID>-author-packet.md` — the author's cover sheet ("Your turn — revise, respond, submit"), with every file as a relative markdown link: the verdict + link to the review report; a three-step checklist (1. revise the SDD as a new version, 2. complete the pre-filled response form, 3. copy both into `04_revision-intake/input/<ID>/` and tell the agent to continue); the round/version legend below, verbatim; the exact file list to submit; "do not edit the routing ledger"; and "submission is complete only when the files are in 04 **and** you invoke the workflow."
+
+  Round/version legend (include verbatim in every author packet):
+  ```text
+  • SDD version bumps when design content changes (v1 → v2)
+  • Response log round = the review round you are answering
+  • Next editor review round = previous + 1, after complete revision intake
+  • Requirements/assumptions get a new versioned filename only when their content changes
+  ```
+  Append ledger row, regenerate the status card, stop (human stop follows).
 - **`Ready for Formal Review` or `Ready for Formal Review with Open Decisions` →** deliver a **layered packet** to `05_formal-review/input/<ID>/`: at the top level only what the reviewer acts on — the current SDD, the ready review, the current requirements and decision register, the decision template, and the cover sheet; everything superseded (earlier rounds, response logs, prior drafts and artifact versions) goes in a `history/` subfolder. Generate `<ID>-formal-review-packet.md` as the cover sheet: current material, open decisions, a suggested reading order, and a one-paragraph summary of `history/`. Also generate `<ID>-formal-decision-FORM.md` from the decision template with **only the administrative fields pre-filled** (review ID, version, rounds, date) and the open decisions listed — the Decision, Rationale, Conditions, and Signature sections stay blank for the human reviewer, per the `05` prohibition. **Reference every file as a relative markdown link** (`[name](name.md)`) so the reviewer clicks rather than searches. The cover sheet summarizes and points; it must not argue for approval. Append ledger row, stop (human stop follows).
 
 ## Prohibitions

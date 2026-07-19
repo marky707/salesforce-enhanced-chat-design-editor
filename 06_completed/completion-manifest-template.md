@@ -2,6 +2,8 @@
 
 <!-- Stable template: contains no run-specific facts. Fill a copy in output/<ID>/. -->
 
+> ✅ **DONE.** This review is complete. Decision: `<Approved / Approved with Conditions>` by `<reviewer>` on `<date>`; final design: `<file, version>`. Open conditions, if any, are listed below with owners. **This package is read-only — new changes require a new review ID referencing this one.**
+
 - **Review ID:**
 - **Final document version:**
 - **Total review rounds:**

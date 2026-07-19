@@ -18,7 +18,7 @@
 
 - **`Approved` →** copy the approved package and decision record to `06_completed/input/<ID>/`, append ledger row (with human actor), continue automatically.
 - **`Approved with Conditions` →** advances to `06_completed` **only when** every condition is recorded with an owner and disposition and the human reviewer has marked it non-blocking. Otherwise the package waits here.
-- **`Changes Required` →** copy the decision packet to `03_author-revision/input/<ID>/`, append ledger row, stop (human stop follows). The revision then loops through `04` and `02` as usual.
+- **`Changes Required` →** copy the decision packet to `03_author-revision/input/<ID>/`, and generate the author packet and pre-filled response form there exactly as `02_editor-review/CONTEXT.md` specifies for a revise verdict — the reviewer's required changes become the finding blocks. Append ledger row, regenerate the status card, stop (human stop follows). The revision then loops through `04` and `02` as usual.
 
 ## AI behavior in this stage
 

@@ -1,10 +1,32 @@
-# reviews/ — Routing Ledgers
+# reviews/ — Routing Ledgers and Status Cards
 
-One append-only ledger per review ID. The **latest row of a ledger is the authoritative workflow state** for that review; folder contents are evidence, not state.
+The workflow state registry. **Exactly two files may exist here per review ID — nothing else:**
+
+1. `<ID>-routing-log.md` — the append-only ledger; its **latest row is the authoritative workflow state**
+2. `<ID>-status.md` — the generated status card, regenerated after every ledger append
+
+Agent working notes, journals, analyses, or any other artifacts do **not** belong in this folder — put them outside the repository or in a scratch location. This folder only works as a registry if its contents are exactly predictable.
 
 ## File naming
 
-`<ID>-routing-log.md`, e.g. `NS-001-routing-log.md`. Review IDs are a short letter prefix plus a zero-padded sequence (`NS-001`, `NS-002`). This folder is the registry of assigned IDs — before assigning a new ID, list the ledgers here.
+Review IDs are a short letter prefix plus a zero-padded sequence (`NS-001`, `NS-002`). This folder is the registry of assigned IDs — before assigning a new ID, list the ledgers here.
+
+## Status card format
+
+```markdown
+# Status — NS-001                      <!-- regenerated; ledger is authoritative -->
+
+- **Where:** 03_author-revision (round 01, SDD v1) — Demo: no
+- **Last verdict:** Revise Before Formal Review (5 findings)
+- **Waiting on:** the author
+
+## Your next action
+1. Open [03_author-revision/input/NS-001/NS-001-author-packet.md](../03_author-revision/input/NS-001/NS-001-author-packet.md)
+2. Revise the SDD as a new version and complete the pre-filled response form
+3. Copy both into `04_revision-intake/input/NS-001/` and tell the agent to continue
+```
+
+Useful waiting-state lines: *"Author has not submitted yet (no files in revision intake)"* · *"Revision files detected — not yet accepted; tell the agent to continue"* · *"Signed decision not yet found in 05_formal-review/output/NS-001/"* · *"Completed — package is read-only; new changes need a new review ID."*
 
 ## Ledger format
 

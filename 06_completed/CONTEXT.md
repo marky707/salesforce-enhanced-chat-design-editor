@@ -15,7 +15,9 @@ A package may enter **only** with a valid human-authored formal decision record:
 
 ## Output (`output/<ID>/`)
 
-- `<ID>-completion-manifest.md` (from `completion-manifest-template.md`)
+- `<ID>-completion-manifest.md` (from `completion-manifest-template.md`, including its filled DONE banner)
+
+After writing the manifest, regenerate the status card as **Completed** and report the closure to the user in plain language: decision, signer, final version, open conditions if any, and "read-only — new changes need a new review ID."
 
 ## Prohibitions
 

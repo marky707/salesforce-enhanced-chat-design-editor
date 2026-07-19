@@ -20,6 +20,17 @@ Do this **after** you've finished revising. Every finding must have a block, inc
 
 **If you changed a supporting artifact** (requirements list, assumptions/decisions register): give it a new versioned filename, list it under "New material introduced this round," and **re-read it once against your revised SDD before submitting** — the most common resubmission failure is a supporting artifact that quietly disagrees with the SDD or with this log (e.g. text pasted from the wrong document, or a register still calling "open" a decision your SDD closed). Revision intake cross-checks all three and will bounce a contradictory package.
 
+**Rounds and versions, in four lines:**
+
+```text
+• SDD version bumps when design content changes (v1 → v2)
+• Response log round = the review round you are answering
+• Next editor review round = previous + 1, after complete revision intake
+• Requirements/assumptions get a new versioned filename only when their content changes
+```
+
+Use one disposition notation throughout: mark the checkboxes (`[x]`) — free-text dispositions are also accepted, but don't mix styles within one log.
+
 - **Review ID:**
 - **Responding to:** `<ID>-review-round-<NN>.md`
 - **Revised document version:**

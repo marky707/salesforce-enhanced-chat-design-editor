@@ -98,13 +98,17 @@ One sentence explaining the readiness decision.
 
 ## Open Decisions for the Senior Architect
 
-Only decisions requiring accountable human judgment.
+Only decisions requiring accountable human judgment. Give every entry a stable
+ID: reuse the author's register ID when one exists (OD-01), otherwise assign
+the next OD-Exx — so the formal reviewer can disposition each by ID.
 
 ## Deferred Review Areas
 
 Lower-priority areas intentionally deferred until major findings are corrected.
 Each entry names its location and gap in one line — specific enough for the
 author to act on proactively. These are likely future findings.
+
+> Tip for the author: addressing these now usually saves a full review round.
 ```
 
 ## Round 2+ behavior

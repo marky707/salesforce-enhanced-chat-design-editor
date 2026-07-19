@@ -24,6 +24,7 @@ The editor packages senior architecture judgment as a **critic, not a co-author*
 1. Put your draft SDD, requirements, assumptions/open decisions, and diagrams in `01_intake/input/<ID>/` (pick an ID like `AC-001`, or let the agent assign one) — **or simply attach the files in chat** and say what they are; the agent files them into the correct stage folder for you and confirms where they went. The same works for revisions, and for the senior architect's completed decision record (which must arrive already signed — the agent files it, never writes it). Formats: markdown, plain text, PDF, or Word — `.docx` files are converted automatically at intake (the original is kept as the source of record).
 2. Say: *"Start a new review from 01_intake/input/. Assign a review ID if one is not already declared, process every eligible automatic transition, and stop at the next required human action."*
 3. For an existing review: *"Run the workflow for review ID `<ID>` from its current stage. Follow the routing contracts, complete every eligible automatic transition, preserve prior rounds, and stop at the next required human action or completed state."*
+4. Or just use the short verbs the agent understands: **`start`**, **`continue <ID>`**, **`status <ID>`**, **`submit revision <ID>`**. At any moment, `reviews/<ID>-status.md` shows where your review stands and your exact next action.
 
 **Option B — standalone in a Claude Project (no repo needed):** see the *Standalone use* section of [`02_editor-review/README.md`](02_editor-review/README.md).
 

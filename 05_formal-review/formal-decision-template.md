@@ -39,3 +39,12 @@
 - **Accountable reviewer (human actor):**
 - **Role:**
 - **Date signed (ISO 8601):**
+
+---
+
+**After signing — four steps, then you're done:**
+
+1. Save this file as `<ID>-formal-decision.md` in `05_formal-review/output/<ID>/` (create the folder if needed, or attach the signed file in chat and ask the agent to file it).
+2. Tell the agent: *"I've recorded my formal decision for `<ID>`. Please continue the workflow."*
+3. Do **not** create or move anything in `06_completed/` yourself — the workflow validates this record and advances the package.
+4. You are done when the status card (`reviews/<ID>-status.md`) says **Completed**.
