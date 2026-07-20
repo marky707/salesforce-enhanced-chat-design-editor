@@ -14,7 +14,7 @@ The core review lens, expanded into the questions the editor actually asks of an
   - Direct-to-owner / preferred-agent vs. queue routing with fallback
   - One Embedded Service deployment vs. several
   - Synchronous vs. asynchronous integration
-  - MessagingSession vs. AgentWork as a reporting source
+  - MessagingSession vs. MessagingSessionMetrics vs. AgentWork as a reporting source
   - Phased rollout vs. single cutover
 - If only one option is viable because of a mandated constraint, is that constraint stated — rather than fake alternatives invented?
 

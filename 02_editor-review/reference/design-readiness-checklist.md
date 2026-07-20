@@ -38,7 +38,7 @@ The formal-review readiness standard, expanded into checkable items. The documen
 ## 5. The design is testable
 
 - [ ] Developers and QA can determine expected behavior without inventing rules
-- [ ] Each metric names its source object, fields, and bounding lifecycle events
+- [ ] Each metric names its source object, fields or metric type, and bounding lifecycle events
 - [ ] Acceptance criteria are thresholds, not sentiments
 - [ ] Post-deployment health has named signals and owners
 

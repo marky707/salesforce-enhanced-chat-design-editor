@@ -34,7 +34,7 @@ Note: the critique **names** the native alternative to expose the missing tradeo
 ### 4. Reporting ambiguity (Proof)
 
 - ❌ "The reporting section should specify data sources."
-- ✓ "Section 10 commits to 'average wait time' without naming a source object, field, or the lifecycle moments that start and stop the clock. MessagingSession and AgentWork measure different things — request-to-acceptance is not queue-entry-to-first-response. Consequence: the dashboard will be built on whichever object the report builder finds first, and operations will manage staffing against a number nobody can define. For each metric: which object and fields, and which two lifecycle events bound it?"
+- ✓ "Section 10 commits to 'average wait time' without naming a source object, field or metric type, or the lifecycle moments that start and stop the clock. MessagingSession, MessagingSessionMetrics, and AgentWork measure different things — a native response-time metric is not automatically request-to-acceptance or queue-entry-to-first-response. Consequence: the dashboard will be built on whichever object the report builder finds first, and operations will manage staffing against a number nobody can define. For each metric: which object and field or metric type, which population, and which lifecycle events bound it?"
 
 ### 5. Unclear ownership (Flow)
 
@@ -119,9 +119,9 @@ Three blocking gaps — an undefined direct-to-owner failure path, an unfollowab
 - Lens: Proof
 - Location: Section 10, "Reporting and KPIs"
 - Evidence: "Dashboards will show average wait time, abandonment rate, and agent handle time."
-- Design gap: No metric names its source object, fields, or bounding lifecycle events. Wait time measured on MessagingSession and on AgentWork are different numbers; neither is chosen. "Abandonment" is undefined for sessions that end before routing, and R-06 demands continuity with Legacy Chat KPIs measured on LiveChatTranscript — no mapping exists.
+- Design gap: No metric names its source object, fields or metric type, population, or bounding lifecycle events. MessagingSession, MessagingSessionMetrics, and AgentWork answer different questions; none is chosen. A response-time metric is not automatically queue wait, "abandonment" is undefined for sessions that end before routing, and R-06 demands continuity with Legacy Chat KPIs measured on LiveChatTranscript — no mapping exists.
 - Consequence: Dashboards will be built on whichever object the report builder picks, operations will manage staffing against undefined numbers, and R-06's "without loss of the current KPIs" cannot be demonstrated.
-- Author's task: For each KPI: source object, fields, the two lifecycle events that bound it, and how the definition maps to the LiveChatTranscript metric it replaces.
+- Author's task: For each KPI: source object, fields or metric type, population, lifecycle meaning, and how the definition maps to the LiveChatTranscript metric it replaces.
 
 ## Open Decisions for the Senior Architect
 

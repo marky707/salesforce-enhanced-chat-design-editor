@@ -2,10 +2,10 @@
 
 The Salesforce Enhanced Chat Design Review Editor helps admins, developers, and junior consultants prepare Enhanced Chat v1 and Omni-Channel solution designs for formal architecture review. It identifies the five highest-risk gaps in rationale, process flow, failure behavior, requirements coverage, and testability — then returns those problems to the author **without rewriting the design**.
 
-> ### 👉 Judges & first-time users: the editor is [`02_editor-review/`](02_editor-review/)
-> That folder **is** the assignment — the five-part portable editor you drop into a Claude Project:
+> ### 👉 Judges & first-time users: the required five-part editor core is [`02_editor-review/`](02_editor-review/)
+> This repository is the complete editor system; that folder contains the competition's five required parts and can run standalone in a Claude Project:
 > `identity.md` · `rules.md` · `examples.md` · `reference/` · `README.md`.
-> It works standalone in any Claude Project, ChatGPT Project, or capable assistant — no repository needed. Start with [`02_editor-review/README.md`](02_editor-review/README.md).
+> Start with [`02_editor-review/README.md`](02_editor-review/README.md) for standalone use, or use the whole repository with Codex or Claude Code for the governed end-to-end workflow.
 >
 > Everything else in this repo (the `01`–`06` stages, `reviews/`, `tools/`) is an **optional governance pipeline** built *around* that editor to prove it holds up under real use — nice to have, not required to use the editor.
 >

@@ -59,9 +59,9 @@ Three blocking gaps — an undefined direct-to-owner failure path, an unfollowab
 - Lens: Proof
 - Location: Section 10, "Reporting and KPIs"
 - Evidence: "Dashboards will show average wait time, abandonment rate, and agent handle time."
-- Design gap: No metric names its source object, fields, or bounding lifecycle events. Wait time measured on MessagingSession and on AgentWork are different numbers; neither is chosen. "Abandonment" is undefined for sessions that end before routing, and R-06 demands continuity with Legacy Chat KPIs measured on LiveChatTranscript — no mapping exists.
+- Design gap: No metric names its source object, fields or metric type, population, or bounding lifecycle events. MessagingSession, MessagingSessionMetrics, and AgentWork answer different questions; none is chosen. A response-time metric is not automatically queue wait, "abandonment" is undefined for sessions that end before routing, and R-06 demands continuity with Legacy Chat KPIs measured on LiveChatTranscript — no mapping exists.
 - Consequence: Dashboards will be built on whichever object the report builder picks, operations will manage staffing against undefined numbers, and R-06's "without loss of the current KPIs" cannot be demonstrated.
-- Author's task: For each KPI: source object, fields, the two lifecycle events that bound it, and how the definition maps to the LiveChatTranscript metric it replaces.
+- Author's task: For each KPI: source object, fields or metric type, population, lifecycle meaning, and how the definition maps to the LiveChatTranscript metric it replaces.
 
 ## Open Decisions for the Senior Architect
 

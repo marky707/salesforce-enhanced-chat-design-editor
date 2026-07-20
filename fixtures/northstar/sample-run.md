@@ -93,3 +93,5 @@ Deferred until the blocking findings are resolved:
 ## How this compares to the golden reference
 
 The run independently reproduced all five priority findings in `expected-review-round-01.md` (deployment contradiction, direct-to-owner fallback, unfollowable routing, unjustified junction object, reporting/proof) at the same severities, and surfaced the same owner-continuity open decision. The one notable difference: this run pushed the login/identity gap (Section 11 vs. Section 7) into Deferred as a likely next-round finding, where the golden reference folds it into the security discussion — a reasonable prioritization difference within the five-finding budget, not a miss. No finding rewrote the design, generated a diagram, or produced replacement wording; every finding ends in a question handed back to the author.
+
+**Reference currency note (added after the preserved output):** the reporting reference now also requires designs to consider `MessagingSessionMetrics` for completed-session response-time and message-count measures. The verbatim output above remains unchanged; the maintained golden reference reflects the current three-source reporting guidance.
