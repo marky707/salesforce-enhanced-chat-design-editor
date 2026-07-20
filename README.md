@@ -2,6 +2,8 @@
 
 An end-to-end, critic-only review workflow for **Salesforce Enhanced Chat and Omni-Channel Solution Design Documents**. Attach a draft and its supporting material in chat; the workflow validates and files the submission, identifies the highest-risk design gaps, returns them to the author to solve, checks the revision, and prepares a ready design for accountable human review.
 
+**[View the visual portfolio →](https://marky707.github.io/salesforce-enhanced-chat-editor-portfolio/)**
+
 > **The complete repository is the editor system.** Its numbered folders provide the intake-to-completion workflow and audit trail. Stage [`02_editor-review/`](02_editor-review/) contains the portable five-part critique engine—the interpretable-context methodology—which can also run independently in a Claude Project.
 
 ## The complete workflow
