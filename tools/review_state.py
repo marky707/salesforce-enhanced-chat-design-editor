@@ -384,7 +384,10 @@ def preflight_revision(review_id: str) -> int:
         elif new_sdds[0].stat().st_size == 0:
             result.failures.append(f"revised SDD file is empty: {new_sdds[0].name}")
     elif not new_sdds:
-        result.failures.append(f"no SDD version newer than {latest['doc_version']} detected")
+        result.failures.append(
+            f"no SDD version newer than {latest['doc_version']} detected — name your revised file with the next version suffix "
+            f"(e.g. `your-design-sdd-draft-v{current_version + 1}.md`); the author packet's candidate file list shows the exact expected names"
+        )
     else:
         result.failures.append(f"multiple new SDD candidates detected: {', '.join(p.name for p in new_sdds)}")
     round_number = numeric_round(latest["round"])
