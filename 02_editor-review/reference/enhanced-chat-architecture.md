@@ -1,6 +1,8 @@
-# Enhanced Chat v1 Architecture — Review Reference
+# Enhanced Chat Architecture — Review Reference
 
-What a reviewer needs to know about Enhanced Chat v1 (formerly Messaging for In-App and Web, "MIAW") to judge a design's plausibility. This supports critique; it is not product documentation, and claims beyond well-established behavior should be flagged as unsupported rather than corrected from memory.
+What a reviewer needs to know about Enhanced Chat to judge a design's plausibility. This supports critique; it is not product documentation, and claims beyond well-established behavior should be flagged as unsupported rather than corrected from memory.
+
+Enhanced Chat behavior can differ by web or in-app surface, deployment version, enabled features, and Salesforce release. When a design depends on a version-specific capability, require it to name the applicable surface/version and cite documentation or target-environment verification. Do not assume that a capability or limitation applies identically across every Enhanced Chat experience.
 
 ## Core components a design must account for
 

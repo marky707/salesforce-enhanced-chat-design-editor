@@ -10,7 +10,7 @@
 - **Document author (if different):**
 - **Demo invoked by (if applicable):**
 - **Date (ISO 8601):**
-- **Scope confirmed:** Enhanced Chat v1 + Omni-Channel — new implementation / Legacy Chat migration (circle one)
+- **Scope confirmed:** Enhanced Chat + Omni-Channel — new implementation / Legacy Chat migration (circle one)
 
 ## Package inventory
 
