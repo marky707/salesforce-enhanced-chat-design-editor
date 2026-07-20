@@ -661,11 +661,17 @@ def preflight_decision(review_id: str) -> int:
             result.passes.append(f"{len(bullets)} required-change item(s) recorded")
         else:
             result.failures.append("Changes Required has no specific required-change bullets")
-    check_residual_risks(text, value, result)
+    check_residual_risks(text, value, result, review_id, round_number)
     return result.emit(f"Preflight decision — {review_id}")
 
 
-def check_residual_risks(text: str, value: str | None, result: "CheckResult") -> None:
+def check_residual_risks(
+    text: str,
+    value: str | None,
+    result: "CheckResult",
+    review_id: str | None = None,
+    round_number: int | None = None,
+) -> None:
     """Machine-enforce the residual-risk table: an Approved* decision must carry rows or an explicit none-attestation, and named rows need owner, evidence, due gate, blocking status, and a human disposition."""
     approvedish = value in {"Approved", "Approved with Conditions"}
     section = re.search(r"^## Residual risk dispositions.*?(?=^## |\Z)", text, re.M | re.S | re.I)
@@ -674,6 +680,7 @@ def check_residual_risks(text: str, value: str | None, result: "CheckResult") ->
             result.failures.append(
                 "an Approved decision must include the 'Residual risk dispositions' section — with rows, or an explicit 'None' attestation; omitting it skips accountable ownership"
             )
+        cover_residual_cross_check(review_id, round_number, set(), result)
         return
     rows = []
     for line in section.group(0).splitlines():
@@ -688,6 +695,7 @@ def check_residual_risks(text: str, value: str | None, result: "CheckResult") ->
                 result.failures.append(
                     "an Approved decision has an empty residual-risk table and no explicit 'None' attestation"
                 )
+        cover_residual_cross_check(review_id, round_number, set(), result)
         return
     complete = True
     for cells in rows:
@@ -704,6 +712,11 @@ def check_residual_risks(text: str, value: str | None, result: "CheckResult") ->
         if not disposition:
             result.failures.append(f"residual risk '{risk}' has no human disposition")
             complete = False
+        elif re.fullmatch(r"(?i)(tbd|t\.b\.d\.?|todo|pending|later|\?+)", disposition):
+            result.failures.append(
+                f"residual risk '{risk}' has a placeholder disposition ('{disposition}') — a real disposition names what happens, by whom, at which gate"
+            )
+            complete = False
         if blocking == "yes" and value == "Approved":
             result.failures.append(
                 f"residual risk '{risk}' is blocking, which contradicts a plain Approved decision — resolve it, own it as a non-blocking condition under Approved with Conditions, or use Changes Required"
@@ -712,6 +725,39 @@ def check_residual_risks(text: str, value: str | None, result: "CheckResult") ->
     if complete:
         result.passes.append(
             f"all {len(rows)} residual risk(s) are owned, evidenced, gated, and dispositioned consistently with the decision"
+        )
+    cover_residual_cross_check(review_id, round_number, {cells[0].strip().lower() for cells in rows}, result)
+
+
+def cover_residual_cross_check(
+    review_id: str | None, round_number: int | None, decided: set[str], result: "CheckResult"
+) -> None:
+    """Warn when the packet cover names residual risks the decision record never dispositions."""
+    if review_id is None or round_number is None:
+        return
+    cover = existing_formal_artifact(review_id, round_number, "packet")
+    if not cover:
+        return
+    cover_section = re.search(
+        r"residual[^\n]*risk.*?(?=^## |\Z)", cover.read_text(encoding="utf-8"), re.I | re.S | re.M
+    )
+    if not cover_section:
+        return
+    cover_risks = []
+    for line in cover_section.group(0).splitlines():
+        cells = split_table_row(line) if line.strip().startswith("|") else []
+        if cells and cells[0] and cells[0].lower() not in {"risk", "---"} and not set(cells[0]) <= {"-"}:
+            cover_risks.append(cells[0].strip())
+    missing = [r for r in cover_risks if r.lower() not in decided]
+    if missing:
+        result.warnings.append(
+            "cover names residual risk(s) absent from the decision's residual table: "
+            + ", ".join(f"'{r}'" for r in missing)
+            + " — confirm they were dispositioned or intentionally superseded"
+        )
+    elif cover_risks:
+        result.passes.append(
+            f"every cover residual risk ({len(cover_risks)}) appears in the decision's residual table"
         )
 
 
