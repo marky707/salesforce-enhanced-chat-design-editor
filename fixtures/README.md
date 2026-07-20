@@ -9,6 +9,7 @@ Everything here is **fictional**, created to demonstrate and test the editor. No
 - `northstar/northstar-assumptions-open-decisions.md` — its assumptions and open decisions
 - `northstar/expected-review-round-01.md` — the expected editor output for round 1 (mirrors the sample review in `02_editor-review/examples.md`)
 - `northstar/review-cycle/` — a complete, reusable two-round example showing critique, a pre-authored fictional response and revision, and converged re-review
+- `morrow-peak/` — a distinct fictional SDD plus the exact output from an isolated unseen-submission evaluation with no expected review supplied to the model
 
 ## See the full review cycle
 
