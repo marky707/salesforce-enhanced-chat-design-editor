@@ -58,6 +58,92 @@ Note: the critique **names** the native alternative to expose the missing tradeo
 
 ---
 
+## Verdict calibration examples
+
+These compact cases teach the harder judgment: when a polished document still has a material gap, when to stop and say Ready, and when there is too little evidence to review.
+
+### Strong-looking design with a hidden proof-population gap
+
+Suppose a polished SDD states:
+
+- Requirement R-03: “During support hours, at least 95% of chats receive a first agent response within 90 seconds.”
+- Failure path: sessions end when no eligible agent is available.
+- KPI population: “in-hours sessions that reached `Active`.”
+- UAT population: “30 timed accepts.”
+
+The correct result is **not Ready**. Both proof populations exclude the no-agent sessions most likely to fail R-03.
+
+> **Acceptable finding:** “Sections 2, 4, 7, and 9 apply R-03 to at least 95% of all in-hours chats, but the KPI counts only sessions that reached `Active` and UAT samples only accepted work. The no-eligible-agent branch ends before either population begins. Consequence: the dashboard and test can report compliance while excluding the requirement's worst failures. Which reporting denominator and UAT sample will include every applicable in-hours session, including sessions that end before acceptance—or where is an accountable owner’s approval of the narrower population recorded?”
+
+This is a Proof finding even when routing, security, deployment, and the rest of the design are strong. Do not let overall document quality hide a denominator mismatch.
+
+Different case: if the design explicitly reports every success and failure category, tests each one, and frames the only remaining issue as the bounded choice “retain the unqualified requirement or approve the documented 95% target,” the editor may carry that choice to the named requirement owner as an Open Decision and issue `Ready for Formal Review with Open Decisions`. The distinction is whether builders and QA still lack proof behavior, or whether only an accountable human commitment remains.
+
+### Ready with a real Open Decision
+
+Suppose the requirements, normal and failure flows, KPI populations, and UAT populations reconcile; builders and QA can follow the design; and the author's register leaves one accountable staffing tradeoff unresolved.
+
+```markdown
+## Verdict
+Ready for Formal Review with Open Decisions
+
+The design is coherent and testable across its critical paths; the remaining staffing choice requires accountable operational judgment rather than another author revision.
+
+> This verdict measures document readiness, not architecture approval. Final design approval remains with the accountable human architect and governance reviewers.
+
+## Priority Findings
+
+No priority findings.
+
+## Open Decisions for the Senior Architect
+
+- **OD-04:** Whether Claims keeps higher routing priority during catastrophe staffing changes — Support Operations must weigh response-time risk against claims urgency with the accountable architect.
+
+## Deferred Review Areas
+
+- The already-approved R-03 amendment is referenced but not attached to this review package; confirm packet inclusion — *build-entry validation*
+- Legal's retention letter remains a production prerequisite; no unresolved design choice is presented — *build-entry validation*
+```
+
+The signed amendment is missing evidence, not an Open Decision. The retention letter is a gate, not an Open Decision, unless someone must still choose a retention policy or accept its risk.
+
+### Insufficient Context without inventing the missing design
+
+Suppose the entire submission says: “Route customers to the best available agent, respond quickly, and reuse the current dashboards.”
+
+```markdown
+## Verdict
+Insufficient Context
+
+The submission names desired outcomes but provides no requirements baseline, walkable routing behavior, failure paths, or measurable proof from which to perform a responsible design review.
+
+> This verdict measures document readiness, not architecture approval. Final design approval remains with the accountable human architect and governance reviewers.
+
+## Priority Findings
+
+### 1. Routing cannot be evaluated
+
+- Severity: Blocking
+- Lens: Flow
+- Location: Routing statement
+- Evidence: “Route customers to the best available agent.”
+- Design gap: “Best” and “available” have no eligibility inputs, precedence, capacity rule, target, timeout, or no-agent outcome.
+- Consequence: Builders must invent the routing policy and QA has no expected result.
+- Author's task: Provide the requirements and end-to-end routing decisions a reviewer can evaluate, including failure outcomes; do not ask the editor to supply them.
+
+## Open Decisions for the Senior Architect
+
+None can be responsibly identified until the missing requirements and design choices are supplied.
+
+## Deferred Review Areas
+
+Defer reporting, security, deployment, and operations review until a reviewable SDD exists.
+```
+
+An `Insufficient Context` verdict identifies the prerequisite evidence; it does not turn the editor into the author.
+
+---
+
 ## Complete sample review
 
 The Northstar fixture draft (`fixtures/northstar/` in the repository) reviewed in full. Keep this in sync with `fixtures/northstar/expected-review-round-01.md`.
