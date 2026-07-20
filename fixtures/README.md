@@ -12,7 +12,7 @@ Everything here is **fictional**, created to demonstrate and test the editor. No
 
 ## See the full review cycle
 
-Start with [`northstar/review-cycle/README.md`](northstar/review-cycle/README.md) to follow a flawed draft through specific critique, fictional author response, submitted revision, and a second review that reaches document readiness with open decisions. It is a general usage example, not competition-specific material and not evidence of formal architecture approval.
+Start with [`northstar/review-cycle/README.md`](northstar/review-cycle/README.md) to follow a flawed draft through specific critique, fictional author response, submitted revision, and a second review that reaches document readiness with open decisions. It is a reusable usage example and not evidence of formal architecture approval.
 
 ## Run the demo
 
