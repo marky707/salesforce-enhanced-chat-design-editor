@@ -1,6 +1,6 @@
 # Salesforce Enhanced Chat Design Review Editor — Portable Editor
 
-A critic-only design review editor for **Salesforce Enhanced Chat v1** (formerly Messaging for In-App and Web) and **Omni-Channel** Solution Design Documents. It finds the five highest-risk readiness gaps and returns them to you to solve. It will not rewrite your document, generate your diagrams, or approve your architecture.
+A critic-only design review editor for **Salesforce Enhanced Chat** and **Omni-Channel** Solution Design Documents. It finds the five highest-risk readiness gaps and returns them to you to solve. It will not rewrite your document, generate your diagrams, or approve your architecture.
 
 **Who it's for:** Salesforce admins, developers, and junior consultants preparing a Service Cloud solution design for formal architecture review.
 
@@ -32,7 +32,7 @@ A missing piece won't block the review — its absence becomes a finding.
 The editor has five parts — `identity.md`, `rules.md`, `examples.md`, `reference/`, and this README. Any assistant that can hold them as context works: a Claude Project, a ChatGPT Project or Custom GPT, a Gemini Gem, or a coding agent pointed at this folder. Claude Project steps shown; the pattern is identical elsewhere (upload the same editor core as knowledge, set the same instructions).
 
 1. Create a Claude Project and upload: `identity.md`, `rules.md`, `examples.md`, and every file in `reference/`. **Do not upload** `CONTEXT.md` or the `input/`/`output/` folders — those are pipeline-only.
-2. Set the Project instructions to: *"You are the design review editor defined in identity.md. Obey rules.md completely. Review submitted Salesforce Enhanced Chat v1 / Omni-Channel solution designs using the output contract in rules.md."*
+2. Set the Project instructions to: *"You are the design review editor defined in identity.md. Obey rules.md completely. Review submitted Salesforce Enhanced Chat / Omni-Channel solution designs using the output contract in rules.md."*
 3. Paste or attach your draft and say: *"Review this solution design for formal-review readiness."*
 4. The review comes back as a chat response. Ignore any stage-routing language you encounter — in a Project there are no folders; the revision loop is simply **revise your document and submit it again**, telling the editor what changed.
 
@@ -60,7 +60,7 @@ You are the architect. The editor's value is exposing what a formal review board
 
 ## Limitations
 
-- Scope: Enhanced Chat v1 + Omni-Channel only. No Legacy Chat design (except as migration source), no Enhanced Chat v2, no CTI/Amazon Connect, no WhatsApp/SMS/Facebook Messenger, no generic Salesforce review, no code review.
+- Scope: Enhanced Chat + Omni-Channel only. No Legacy Chat design except as a migration source, no CTI/Amazon Connect, no WhatsApp/SMS/Facebook Messenger, no generic Salesforce review, and no code review. Version-specific behavior must be identified and supported by the submitted design, a cited source, or target-environment validation.
 - **"Ready for Formal Review" is document readiness, not approval.** Approval belongs to your accountable human architect and governance reviewers.
 - It won't certify security or compliance, and it won't speak for Salesforce behavior beyond well-established platform behavior — unverifiable claims in your draft get flagged, not corrected.
 - Five findings per pass, by design. Fix the big ones; rerun; the next tier surfaces — and the *Deferred Review Areas* list tells you in advance what that next tier is.

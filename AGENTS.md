@@ -4,7 +4,7 @@ Instructions for Codex, Claude Code, and future maintainers operating this repos
 
 ## What this repository is
 
-A critic-only ICM pipeline that readies Salesforce Enhanced Chat v1 (formerly Messaging for In-App and Web) and Omni-Channel Solution Design Documents for formal architecture review. The editor identifies weaknesses and returns them to the author. It never rewrites, never generates missing content, and never approves architecture.
+A critic-only ICM pipeline that readies Salesforce Enhanced Chat and Omni-Channel Solution Design Documents for formal architecture review. The editor identifies weaknesses and returns them to the author. It never rewrites, never generates missing content, and never approves architecture.
 
 ## Repository map
 
@@ -81,7 +81,7 @@ Never critique an attached document directly in chat while skipping the pipeline
 - **Working vs. submission location.** `03_author-revision/output/<ID>/` is the author's retained working/output copy. `04_revision-intake/input/<ID>/` is the deliberate submission drop zone. File presence is evidence; the human invocation is the submission event.
 - **No guessing.** Ambiguous or contradictory state → state-error report, stop, preserve evidence.
 - **Fail loud on unsafe writes.** Refuse to write into a different review ID than the one being processed unless the user confirms; refuse to reuse an existing versioned filename for changed content; refuse to author or backfill Decision/Rationale/Signature content anywhere, ever.
-- **Scope is settled.** Enhanced Chat v1 + Omni-Channel only. No CTI, no Enhanced Chat v2, no other messaging channels, no code review. Do not widen scope during maintenance.
+- **Scope is settled.** Enhanced Chat + Omni-Channel only. No CTI, no other messaging channels, no code review. Treat version-specific behavior as a claim that must be identified and supported; do not widen scope beyond Enhanced Chat during maintenance.
 - **Fixtures stay fictional.** `fixtures/` content never enters `reviews/` or stage folders except when a user explicitly starts a demo run, and demo ledgers must be labeled as demos.
 - **Demos preserve the approval boundary.** An AI may advise a fictional reviewer but must never fill or sign the formal decision. A demo stops at `05` unless a real human completes the fictional decision record.
 

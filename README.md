@@ -1,68 +1,128 @@
 # Salesforce Enhanced Chat Design Review Editor
 
-The Salesforce Enhanced Chat Design Review Editor helps admins, developers, and junior consultants prepare Enhanced Chat v1 and Omni-Channel solution designs for formal architecture review. It identifies the five highest-risk gaps in rationale, process flow, failure behavior, requirements coverage, and testability — then returns those problems to the author **without rewriting the design**.
+An end-to-end, critic-only review workflow for **Salesforce Enhanced Chat and Omni-Channel Solution Design Documents**. Attach a draft and its supporting material in chat; the workflow validates and files the submission, identifies the highest-risk design gaps, returns them to the author to solve, checks the revision, and prepares a ready design for accountable human review.
 
-> ### 👉 Judges & first-time users: the required five-part editor core is [`02_editor-review/`](02_editor-review/)
-> This repository is the complete editor system; that folder contains the competition's five required parts and can run standalone in a Claude Project:
-> `identity.md` · `rules.md` · `examples.md` · `reference/` · `README.md`.
-> Start with [`02_editor-review/README.md`](02_editor-review/README.md) for standalone use, or use the whole repository with Codex or Claude Code for the governed end-to-end workflow.
->
-> Everything else in this repo (the `01`–`06` stages, `reviews/`, `tools/`) is an **optional governance pipeline** built *around* that editor to prove it holds up under real use — nice to have, not required to use the editor.
->
-> **Want to see it work before reading anything?** [`fixtures/northstar/sample-run.md`](fixtures/northstar/sample-run.md) is a real, unedited review the editor produced against a flawed demo design — model and date recorded.
+> **The complete repository is the editor system.** Its numbered folders provide the intake-to-completion workflow and audit trail. Stage [`02_editor-review/`](02_editor-review/) contains the portable five-part critique engine—the competition methodology—which can also run independently in a Claude Project.
 
-## What it reviews
-
-Draft Solution Design Documents for **Salesforce Enhanced Chat v1** (formerly Messaging for In-App and Web) and **Omni-Channel** — new implementations or migrations from Legacy Chat. Out of scope: Legacy Chat design (except as migration source), Enhanced Chat v2, CTI/Amazon Connect, WhatsApp/SMS/Facebook Messenger, generic Salesforce reviews, code review, and any form of production or security approval.
-
-## Why it won't rewrite your document
-
-The editor packages senior architecture judgment as a **critic, not a co-author**. You learn solution architecture by resolving exposed weaknesses yourself; a rewritten document teaches nothing and hides what the author doesn't yet understand. Every finding names the exact passage, the design gap, the downstream consequence, and a focused problem for you to solve.
-
-## What you need
-
-- An AI coding agent (Codex or Claude Code) opened in this repository — the agent runs the workflow; you never move packages between stages yourself.
-- **No coding agent? You can still use the editor today:** upload the `02_editor-review/` bundle to a Claude Project, ChatGPT Project/Custom GPT, or similar and paste your draft — see Option B below. The repository workflow (ledger, rounds, formal approval) needs an agent; the critique itself runs on any capable assistant.
-- **Python 3, only for the built-in helpers the agent runs on your behalf** (the Word-document converter and the state-validation checks). Standard library only — nothing to install beyond Python itself, and **you never need to type a Python command yourself** (a CLI path exists for power users — see [`tools/README.md`](tools/README.md)). No Python? Submit PDF/markdown/plain text instead of Word, and the pipeline simply runs with fewer automatic safety checks.
-
-## Quick start
-
-**Option A — full pipeline (Codex or Claude Code in this repo):**
-
-1. Attach your draft SDD, requirements, assumptions/open decisions, and diagrams in chat and say **`start`** — the agent checks the package first (and tells you what's missing before anything is created), files everything, and runs the review to the first human stop. Prefer folders? Place the files in `01_intake/input/<ID>/` yourself and say `start <ID>`. Formats: markdown, plain text, PDF, or Word (`.docx` is converted automatically; the original is kept).
-2. From then on you only need three more words: **`continue <ID>`** to resume, **`status <ID>`** to see where things stand and your next action, **`submit revision <ID>`** when you've revised. (Power users: dry-run and consistency checks are described in [`tools/README.md`](tools/README.md).)
-3. **You never have to touch the folders.** At every step — the first draft, revision files, changed supporting artifacts, even the senior architect's signed decision record — you can simply attach the files in chat and say what they are; the agent files each one in the right place, tells you every rename, and still runs all the normal checks before accepting anything. The folders are the audit trail; chat is the front door. (One rule never bends: the decision record must arrive already written and signed — the agent files it, never writes it.)
-4. The long-form equivalent, if you prefer a sentence: *"Run the workflow for review ID `<ID>` from its current stage, complete every eligible automatic transition, preserve prior rounds, and stop at the next required human action."*
-
-**Option B — standalone in a Claude Project (no repo needed):** see the *Standalone use* section of [`02_editor-review/README.md`](02_editor-review/README.md).
-
-**Try the demo:** copy `fixtures/northstar/` contents (except the expected review) into `01_intake/input/NS-001/`, then say: *"Start a new demo review for ID NS-001 from 01_intake/input/, process every eligible automatic transition, and stop at the next required human action."* Compare the editor's output with `fixtures/northstar/expected-review-round-01.md`. **Standalone demo (no repo):** paste `fixtures/northstar/northstar-sdd-draft-v1.md` into your Project and compare the review you get with the expected one — matching in substance and form (anchored findings, consequences, no rewriting), not word-for-word.
-
-## The workflow
+## The complete workflow
 
 ```text
-01 Intake ──complete──▶ 02 Editor Review ──ready──▶ 05 Formal Review ──approved──▶ 06 Completed
-   │ incomplete            │ changes required           │ changes required
-   ▼ (stays, human fixes)  ▼                            ▼
-                        03 Author Revision ◀────────────┘
-                           │ author submits (HUMAN)
-                           ▼
-                        04 Revision Intake ──complete──▶ back to 02 (next round)
-                           │ incomplete ──▶ back to 03
+Submit documents in chat
+          │
+          ▼
+01 Intake and validation
+          │
+          ▼
+02 Critic-only editor review ── revision needed ──▶ 03 Author revision
+          ▲                                               │
+          │                                               │ author submits
+          └────────────── 04 Revision validation ◀─────────┘
+          │
+          │ ready for human judgment
+          ▼
+05 Accountable human review ── changes required ──▶ 03 Author revision
+          │
+          │ approved by the human reviewer
+          ▼
+06 Completed record
 ```
 
-- **What the editor returns:** a verdict (`Revise Before Formal Review`, `Ready for Formal Review with Open Decisions`, `Ready for Formal Review`, or `Insufficient Context`) plus at most five prioritized findings, each anchored to an exact passage with its consequence and a question for you to resolve.
-- **"Ready for Formal Review" means** the document is coherent enough for a human architecture review. It is **not** architecture approval — that decision belongs to the accountable human reviewer in `05_formal-review/`.
-- **The workflow stops for people twice:** at `03_author-revision/` (you revise and deliberately resubmit) and at `05_formal-review/` (a human records the decision). Everything else advances automatically during an invoked run.
-- **The formal reviewer gets a focused packet:** a linked "start here" cover naming the design version to review, what needs your judgment (every open decision and residual risk, each with its own entry), and a decision form with the clerical fields already filled in. Superseded drafts and earlier rounds sit in a `history/` subfolder, out of your way. The decision itself — every selection, rationale, condition, and the signature — must be authored by the human reviewer; the AI cannot write or infer approval, even in demos, and a signed record (not a chat message) is what advances the package.
-- **To revise and rerun:** your review packet arrives with a **pre-filled response form** — one block per finding; mark each resolved / partially resolved / disagree, say where the design changed, and explain in your own words (disagreeing is allowed when argued from a requirement). Put the revised SDD (new version in the filename), the completed form, and any changed supporting artifact into `04_revision-intake/input/<ID>/` — or attach them in chat — and say **`submit revision <ID>`**. The agent checks completeness before accepting; each accepted submission starts the next review round.
-- **Converge faster:** the review's *Deferred Review Areas* section previews likely future findings — addressing those items in the same revision usually saves a full round. If you change a supporting artifact (requirements, assumptions), version its filename and re-read it against your SDD before submitting; intake cross-checks the package and bounces contradictions.
-- **History is preserved:** packages advance by copying forward; every draft remains in its upstream stage, and every review, response, manifest, and decision remains traceable. Completion contains the final design and full review/decision evidence but intentionally excludes superseded SDDs.
+Each folder has one responsibility:
 
-## Under the hood: automatic safety checks
+| Stage | One job |
+|---|---|
+| [`01_intake/`](01_intake/) | Validate, normalize, and inventory the submitted design package |
+| [`02_editor-review/`](02_editor-review/) | Critique the design without rewriting it or claiming approval |
+| [`03_author-revision/`](03_author-revision/) | Return prioritized findings and a response form to the author |
+| [`04_revision-intake/`](04_revision-intake/) | Validate the author's dispositions, revised document, and version change |
+| [`05_formal-review/`](05_formal-review/) | Assemble a focused packet for accountable human judgment |
+| [`06_completed/`](06_completed/) | Preserve the approved design, decision record, and review history as read-only evidence |
 
-The agent runs a read-only helper (`tools/review_state.py`) at every step on your behalf: it verifies packages before anything is created, detects files you've dropped off before they're accepted, and cross-checks the ledger, status, and packet integrity. It never critiques a design, moves a package, or creates approval — and you never need to run it yourself. Curious or debugging? See [`tools/README.md`](tools/README.md).
+## Start an end-to-end review
 
-## Repository layout
+> **Chat is the front door.** You do not need to place files into stage folders yourself. With this repository open in Codex or Claude Code, attach the draft SDD, requirements, assumptions/open decisions, and diagrams in chat. After validation, the agent files each artifact under the correct review ID and stage, reports what it accepted or renamed, advances every eligible automatic step, and stops whenever a person must act.
 
-Six numbered stage folders (each with a `CONTEXT.md` contract and per-review `input/`/`output/` subfolders), the portable editor inside `02_editor-review/`, routing ledgers in `reviews/` (the authoritative record of where every review stands), a fictional demo package in `fixtures/northstar/`, and `tools/` (the Word-to-markdown converter intake uses). Agents and maintainers: read `AGENTS.md` and the root `CONTEXT.md`.
+1. Attach the draft and supporting material, then say **`start`**. Missing requirements, diagrams, assumptions, or evidence become specific findings; the editor does not invent them or silently fill the gaps.
+2. Read the generated review and author packet. Revise the SDD yourself, disposition each finding, attach the new version and response, then say **`submit revision <ID>`**.
+3. Use **`status <ID>`** for orientation and **`continue <ID>`** after a human action. The next review reads the response first, acknowledges resolved findings, and re-anchors only the issues that remain.
+4. When the document is ready, an accountable human architect receives the formal packet. You may attach an already-written and signed decision for filing, but the agent will never choose, write, complete, or sign that decision.
+
+The workflow accepts markdown, plain text, PDF, and Word. Its Python helpers use only the standard library and are run by the agent; [`tools/README.md`](tools/README.md) documents the optional CLI for maintainers.
+
+## See the workflow improve a design
+
+- **One-pass evidence:** the [real, unedited Northstar sample review](fixtures/northstar/sample-run.md) records the model, date, invocation, and exact critique produced from a deliberately flawed fictional design.
+- **Complete feedback loop:** the reusable [Northstar Review Cycle](fixtures/northstar/review-cycle/) preserves a five-artifact sequence: flawed draft, round-one critique, pre-authored fictional response, submitted revision, and a round-two review that reaches readiness without the editor rewriting the design.
+- **Maintained reference:** [`expected-review-round-01.md`](fixtures/northstar/expected-review-round-01.md) defines the substantive and structural behavior expected from the editor; outputs should match its anchors, consequences, author-owned tasks, and critic-only boundary rather than its exact wording.
+
+## What you get back
+
+- **One readiness verdict:** `Revise Before Formal Review`, `Ready for Formal Review with Open Decisions`, `Ready for Formal Review`, or `Insufficient Context`.
+- **At most five prioritized findings:** each includes severity, review lens, exact location, quoted evidence, the design gap, its consequence, and a focused task for the author.
+- **Open decisions for the senior architect:** business tradeoffs, risk acceptances, and choices requiring accountable human judgment rather than AI inference.
+- **Deferred review areas:** specific lower-priority weaknesses and when they are likely to matter, so the author can address them before the next pass.
+
+The goal is **readiness, not endless criticism**. Once the document is coherent enough for a competent builder and QA team, non-blocking judgment calls travel forward to the accountable human architect instead of forcing unnecessary revision cycles. A ready verdict measures document quality—it is never architecture or production approval.
+
+## How the critique engine works
+
+Every review applies **Why → Flow → Failure → Proof**:
+
+- **Why:** Which requirement and tradeoff justify the decision?
+- **Flow:** Can a builder follow actors, systems, handoffs, decisions, and state changes?
+- **Failure:** What happens when routing, integrations, staffing, or session behavior fails?
+- **Proof:** Which test, event, object, field, log, or metric proves the requirement was met?
+
+Every finding must identify an exact location and quoted passage, explain the specific design gap and downstream consequence, and end with a focused problem for the author. The editor never writes replacement content, generates missing diagrams, invents requirements or implementation details, or claims architecture approval.
+
+### The portable five-part engine
+
+| Part | One job |
+|---|---|
+| [`identity.md`](02_editor-review/identity.md) | Defines the senior Salesforce editor, its audience, scope, tone, and authority boundary |
+| [`rules.md`](02_editor-review/rules.md) | Defines critique behavior, convergence, prohibitions, verdicts, and the output contract |
+| [`examples.md`](02_editor-review/examples.md) | Distinguishes specific critique from generic feedback and forbidden rewriting |
+| [`reference/`](02_editor-review/reference/) | Supplies focused Salesforce architecture checklists and domain guidance |
+| [`README.md`](02_editor-review/README.md) | Explains inputs, setup, output, and standalone use |
+
+## Use only the portable editor in a Claude Project
+
+The critique engine works without the surrounding workflow when folder routing and status history are unnecessary:
+
+1. Create a Claude Project and upload `identity.md`, `rules.md`, `examples.md`, and the files under `reference/` from [`02_editor-review/`](02_editor-review/). Do not upload the folder's top-level, pipeline-only `CONTEXT.md`, `input/`, or `output/` content.
+2. Attach the draft SDD and, when available, its requirements, assumptions/open decisions, and diagrams.
+3. Set the Project instruction to: *"You are the design review editor defined in identity.md. Obey rules.md completely. Review submitted Salesforce Enhanced Chat and Omni-Channel solution designs using the output contract in rules.md."*
+4. Ask: *"Review this solution design for formal-review readiness. Critique it; do not rewrite it."* Revise the document yourself and resubmit it with what changed.
+
+Documents attached to a standalone Claude Project are reviewed directly in chat. Repository routing, ledgers, status cards, revision intake, formal packets, and completion history are available only with the full repository workflow. See [`02_editor-review/README.md`](02_editor-review/README.md) for the complete standalone instructions.
+
+## Scope
+
+The editor reviews Solution Design Documents for **Salesforce Enhanced Chat** and **Omni-Channel**, including new implementations and migrations from Legacy Chat.
+
+Enhanced Chat capabilities vary by deployment surface, configuration, and release. A design that relies on version-specific behavior must name and verify that behavior; the editor flags unsupported claims instead of guessing.
+
+**In scope:** requirements, architecture, routing, conversation lifecycle, integrations, data relationships, reporting, security, testing, deployment, and operational support.
+
+**Out of scope:** Legacy Chat design except as a migration source, CTI/Amazon Connect, WhatsApp/SMS/Facebook Messenger, generic Salesforce reviews, code review, and any form of production or security certification.
+
+## Workflow behavior and human boundaries
+
+- **People own the work:** the author creates every design revision; the accountable architect creates every formal decision. The AI critiques, packages, validates, and routes—it does not take either person's authority.
+- **The workflow stops for people twice:** at `03_author-revision/` for an author-created revision and at `05_formal-review/` for a human decision. Everything else advances only during an invoked agent run.
+- **The formal reviewer receives a focused packet:** current design and review material stay prominent; superseded drafts and prior rounds remain preserved as history.
+- **Responses are traceable:** every prior finding requires a disposition, change location, and explanation. A requirement-based disagreement is allowed and evaluated on its reasoning rather than treated as noncompliance.
+- **History is preserved:** packages copy forward instead of moving destructively. Every accepted draft, review, response, manifest, and decision remains traceable upstream.
+- **Completion is read-only:** later design changes require a new review ID that references the completed review.
+
+## Reproduce the fictional demo
+
+- **Follow the complete loop:** open the [Northstar Review Cycle](fixtures/northstar/review-cycle/) and read its artifacts in numbered order.
+- **Standalone:** attach [`northstar-sdd-draft-v1.md`](fixtures/northstar/northstar-sdd-draft-v1.md) and [`northstar-requirements.md`](fixtures/northstar/northstar-requirements.md), then compare the result with the [observed sample](fixtures/northstar/sample-run.md) and [maintained expected review](fixtures/northstar/expected-review-round-01.md).
+- **Full workflow:** copy the fictional Northstar submission files into `01_intake/input/NS-001/`, say *"Start a new demo review for ID NS-001,"* and follow the generated status card. Demo ledgers must remain marked `Demo: yes`.
+
+## Under the hood
+
+The agent runs the read-only helper [`tools/review_state.py`](tools/review_state.py) before and after workflow operations. It checks submissions, detects dropped-off files before accepting them, derives status from the routing ledger, validates packet links and state consistency, and generates checksummed artifact inventories. It never critiques a design, moves a package, or creates approval.
+
+The repository contains six numbered stage folders with explicit `CONTEXT.md` contracts, [`reviews/`](reviews/) for authoritative routing ledgers and derived status cards, [`fixtures/`](fixtures/) for fictional demonstrations, and [`tools/`](tools/) for deterministic validation and Word-to-markdown conversion. Agents and maintainers should read [`AGENTS.md`](AGENTS.md) and the root [`CONTEXT.md`](CONTEXT.md) before operating the workflow.

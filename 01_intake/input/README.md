@@ -4,7 +4,7 @@ The easiest first-time path is to attach the documents in chat and say `start`; 
 
 ## Before you start
 
-- **Required:** one readable draft SDD with a declared version and identifiable Enhanced Chat v1 / Omni-Channel scope.
+- **Required:** one readable draft SDD with a declared version and identifiable Enhanced Chat / Omni-Channel scope.
 - **Required:** the requirements source, either embedded in the SDD or supplied separately.
 - **Required when applicable:** assumptions/open decisions and external sources the design depends on.
 - **Optional:** available diagrams and supporting evidence. Missing author-produced diagrams pass through for the editor to critique.

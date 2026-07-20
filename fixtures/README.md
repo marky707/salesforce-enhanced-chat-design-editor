@@ -8,6 +8,11 @@ Everything here is **fictional**, created to demonstrate and test the editor. No
 - `northstar/northstar-requirements.md` — its requirements list
 - `northstar/northstar-assumptions-open-decisions.md` — its assumptions and open decisions
 - `northstar/expected-review-round-01.md` — the expected editor output for round 1 (mirrors the sample review in `02_editor-review/examples.md`)
+- `northstar/review-cycle/` — a complete, reusable two-round example showing critique, a pre-authored fictional response and revision, and converged re-review
+
+## See the full review cycle
+
+Start with [`northstar/review-cycle/README.md`](northstar/review-cycle/README.md) to follow a flawed draft through specific critique, fictional author response, submitted revision, and a second review that reaches document readiness with open decisions. It is a general usage example, not competition-specific material and not evidence of formal architecture approval.
 
 ## Run the demo
 
