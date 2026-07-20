@@ -14,6 +14,10 @@ A critic-only design review editor for **Salesforce Enhanced Chat v1** (formerly
 | `reference/` | Salesforce domain frameworks the editor consults (see `reference/CONTEXT.md`) |
 | `README.md` | This guide |
 
+## See it work first
+
+[`fixtures/northstar/sample-run.md`](../fixtures/northstar/sample-run.md) is an **actual, unedited review** the editor produced against a deliberately flawed demo SDD — model, date, and exact invocation recorded. Read that to see the real output before you run your own.
+
 ## What to submit
 
 - Your draft SDD — markdown, plain text, PDF, or Word (in the pipeline, intake converts `.docx` automatically; in a Claude Project, upload the Word file directly or paste the text) — covering, ideally: requirements, architecture, routing, conversation lifecycle, integrations, data relationships, reporting, security, testing, deployment, and operational support

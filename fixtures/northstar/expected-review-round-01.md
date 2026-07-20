@@ -69,4 +69,9 @@ Three blocking gaps — an undefined direct-to-owner failure path, an unfollowab
 
 ## Deferred Review Areas
 
-Deferred until the blocking findings are resolved: proactive invitation expiration enforcement and its time authority (Section 6); mobile wrapper versioning, payload contract, and ownership (Section 8); the absence of monitoring, retry, and rollback definitions (Sections 9–12), including the undefined fate of in-flight legacy chats when "Legacy Chat will be disabled at the start of Week 1"; testing depth in Section 12, which currently defers test design to the build phase.
+Deferred until the blocking findings are resolved:
+
+- Proactive invitation expiration enforcement and its time authority (Section 6) — *likely next-round finding*
+- Mobile wrapper versioning, payload contract, and ownership (Section 8) — *likely next-round finding*
+- Absence of monitoring, retry, and rollback definitions, including the undefined fate of in-flight legacy chats when "Legacy Chat will be disabled at the start of Week 1" (Sections 9–12) — *build-entry validation*
+- Testing depth: Section 12 defers test design to the build phase — *valuable improvement*

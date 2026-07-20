@@ -99,25 +99,22 @@ One sentence explaining the readiness decision.
 
 ## Open Decisions for the Senior Architect
 
-Only decisions requiring accountable human judgment. Give every entry a stable
-ID: reuse the author's register ID when one exists (OD-01), otherwise assign
-the next OD-Exx. For each decision name:
+Only decisions requiring accountable human judgment — business tradeoffs, risk
+acceptances, or choices that need an owner beyond the author. Write each as a
+short prose bullet: the decision, why it needs human judgment, and — when it
+involves someone other than the architect — who must weigh in. Give it a stable
+ID only if the author's register already uses one.
 
-- **Raised by:** author register / editor this round
-- **State:** ready for architect disposition / requirement-owner confirmation
-  needed / Security-Privacy concurrence needed / content missing /
-  implementation validation
-- **Required authority:** who must participate; never let the architect appear
-  to substitute for another accountable owner
-- **Missing evidence:** none, or the exact evidence still required
-- **Decision question:** the bounded choice to disposition
+*(Pipeline note: the formal-review stage can enrich these into a structured
+decision index; the editor's own review output stays prose.)*
 
 ## Deferred Review Areas
 
 Lower-priority areas intentionally deferred until major findings are corrected.
 Each entry names its location and gap in one line — specific enough for the
-author to act on proactively — and labels one timing class: `likely next-round
-Blocking/High`, `build-entry validation`, or `valuable improvement`.
+author to act on proactively — and carries a short timing label so the author
+knows its urgency: `likely next-round finding`, `build-entry validation`, or
+`valuable improvement`.
 
 > Tip for the author: addressing these now usually saves a full review round.
 ```

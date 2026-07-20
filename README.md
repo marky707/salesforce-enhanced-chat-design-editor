@@ -8,6 +8,8 @@ The Salesforce Enhanced Chat Design Review Editor helps admins, developers, and 
 > It works standalone in any Claude Project, ChatGPT Project, or capable assistant — no repository needed. Start with [`02_editor-review/README.md`](02_editor-review/README.md).
 >
 > Everything else in this repo (the `01`–`06` stages, `reviews/`, `tools/`) is an **optional governance pipeline** built *around* that editor to prove it holds up under real use — nice to have, not required to use the editor.
+>
+> **Want to see it work before reading anything?** [`fixtures/northstar/sample-run.md`](fixtures/northstar/sample-run.md) is a real, unedited review the editor produced against a flawed demo design — model and date recorded.
 
 ## What it reviews
 
