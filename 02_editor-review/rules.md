@@ -46,6 +46,21 @@ The editor **may** name a credible alternative to expose a missing tradeoff (e.g
 - Draft omits information you'd need → that absence is the finding. Do not fill it with assumption.
 - The submission is too thin for a responsible review → verdict `Insufficient Context`, and say exactly what evidence is missing.
 
+## Mandatory pre-verdict proof reconciliation
+
+Before selecting either Ready verdict, reconcile every material requirement across four places: **the requirement, the designed flow and failure branches, the KPI/reporting population, and the validation or UAT population**. Compare the same four dimensions in each place:
+
+1. **Quantifier** — all, at least 95%, average, maximum, target, or another commitment
+2. **Population** — every submitted chat, in-hours sessions, accepted work, sessions that reached `Active`, transferred sessions, or another subset
+3. **Threshold** — the numerical or categorical pass boundary
+4. **Timing** — the events that start and stop the clock and the period over which the result is evaluated
+
+Include unsuccessful branches in this check: no eligible agent, ended before acceptance, timeout, abandonment, retry exhaustion, after-hours, and other outcomes named by the design. A KPI or UAT sample limited to accepted, `Active`, successful, or timed cases does **not** prove a requirement written over all chats or sessions. If reporting or testing hides an applicable failure population or leaves its treatment ambiguous, raise a priority finding and do not issue a Ready verdict.
+
+Do not turn every visible threshold disagreement into another author-revision cycle. If the document explicitly inventories every excluded/failure category, makes each observable in reporting and testing, and leaves only a bounded requirement-governance choice (for example, retain an unqualified SLA or approve a documented 95% target), carry that exact choice to the named accountable authority as an Open Decision. `Ready for Formal Review with Open Decisions` may then be correct because implementation and proof behavior are defined; the human is deciding the commitment, not asking the author to reconstruct the evidence.
+
+Perform this as an internal review pass. Do not add a reconciliation table to the output unless the mismatch itself is needed as finding evidence.
+
 ## Severity
 
 - **Blocking** — a formal review could not proceed responsibly: an unfollowable critical flow, an undefined high-risk failure, a contradiction between artifacts, an untestable core behavior, a major decision with no rationale. Reserve Blocking for gaps that leave a competent builder or the review board unable to proceed — hardening improvements, documentation-depth preferences, and questions an adversarial reader can construct against otherwise-defined behavior are **High at most**.
@@ -105,6 +120,13 @@ short prose bullet: the decision, why it needs human judgment, and — when it
 involves someone other than the architect — who must weigh in. Give it a stable
 ID only if the author's register already uses one.
 
+Classify each candidate before listing it:
+
+- unresolved choice, tradeoff, or risk acceptance → **Open Decision**
+- already signed or settled choice → evidence confirmation, **not** an Open Decision
+- missing attachment, citation, diagram, or other artifact → finding or Deferred Review Area, depending on materiality
+- production prerequisite or external approval → gate/assumption in Deferred Review Areas unless an unresolved choice or risk acceptance still requires human judgment
+
 *(Pipeline note: the formal-review stage can enrich these into a structured
 decision index; the editor's own review output stays prose.)*
 
@@ -121,4 +143,4 @@ knows its urgency: `likely next-round finding`, `build-entry validation`, or
 
 ## Round 2+ behavior
 
-Read the author's response log first. For each prior finding: judge whether the revision resolves it — resolved findings are acknowledged in one line (not re-litigated); unresolved or partially resolved ones may reappear, re-anchored to the revised text. A documented disagreement argued from requirements or constraints is legitimate; judge the argument, not the compliance. Then review new and changed content fresh, including a requirements-versus-acceptance comparison. The five-finding cap applies per pass, always. If the editor raises a new formal decision after the author's submission, mark it `editor this round`; in the repository pipeline, the generated formal decision index becomes the current authoritative list instead of pretending older counts in the SDD/register already include it (standalone use has no index — just state the new decision plainly in Open Decisions).
+Read the author's response log first. For each prior finding: judge whether the revision resolves it — resolved findings are acknowledged in one line (not re-litigated); unresolved or partially resolved ones may reappear, re-anchored to the revised text. A documented disagreement argued from requirements or constraints is legitimate; judge the argument, not the compliance. Then review new and changed content fresh, including the mandatory pre-verdict proof reconciliation across requirements, failure branches, KPI populations, and validation populations. The five-finding cap applies per pass, always. If the editor raises a new formal decision after the author's submission, mark it `editor this round`; in the repository pipeline, the generated formal decision index becomes the current authoritative list instead of pretending older counts in the SDD/register already include it (standalone use has no index — just state the new decision plainly in Open Decisions).

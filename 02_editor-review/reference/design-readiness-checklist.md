@@ -23,6 +23,8 @@ The formal-review readiness standard, expanded into checkable items. The documen
 - [ ] Every material requirement appears in a process flow
 - [ ] Every material requirement has a validation method
 - [ ] Acceptance criteria preserve the requirement's quantifier, population, threshold, and timing — or an accountable requirement owner explicitly approves the change
+- [ ] The designed failure branches, KPI/reporting denominator, and UAT sample cover the same applicable population as the requirement
+- [ ] No-agent, pre-acceptance end, timeout, abandonment, retry-exhaustion, and other unsuccessful outcomes are included when the requirement applies to them
 - [ ] No design element exists without a driving requirement (gold-plating check)
 
 ## 4. Critical failures are addressed
@@ -39,6 +41,7 @@ The formal-review readiness standard, expanded into checkable items. The documen
 
 - [ ] Developers and QA can determine expected behavior without inventing rules
 - [ ] Each metric names its source object, fields or metric type, and bounding lifecycle events
+- [ ] Each metric and test states its population; successful or accepted cases are not used as a proxy for the full requirement population
 - [ ] Acceptance criteria are thresholds, not sentiments
 - [ ] Post-deployment health has named signals and owners
 
