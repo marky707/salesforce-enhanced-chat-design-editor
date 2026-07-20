@@ -53,6 +53,7 @@ The workflow accepts markdown, plain text, PDF, and Word. Its Python helpers use
 
 - **One-pass evidence:** the [real, unedited Northstar sample review](fixtures/northstar/sample-run.md) records the model, date, invocation, and exact critique produced from a deliberately flawed fictional design.
 - **Complete feedback loop:** the reusable [Northstar Review Cycle](fixtures/northstar/review-cycle/) preserves a five-artifact sequence: flawed draft, round-one critique, pre-authored fictional response, submitted revision, and a round-two review that reaches readiness without the editor rewriting the design.
+- **Unseen generalization evidence:** the [Morrow Peak evaluation](fixtures/morrow-peak/) records a fresh isolated review of a distinct fictional design with no Morrow Peak expected answer or pre-authored findings supplied to the model.
 - **Maintained reference:** [`expected-review-round-01.md`](fixtures/northstar/expected-review-round-01.md) defines the substantive and structural behavior expected from the editor; outputs should match its anchors, consequences, author-owned tasks, and critic-only boundary rather than its exact wording.
 
 ## What you get back
