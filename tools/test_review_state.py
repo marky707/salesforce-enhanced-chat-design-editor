@@ -683,6 +683,82 @@ None — no residual risks identified for this round.
         self.assertIn("absent from the decision's residual table", out)
         self.assertIn("Session lifecycle", out)
 
+    def test_cover_cross_check_tolerates_trivial_formatting_drift(self) -> None:
+        self._formal_setup(
+            "UT-110",
+            "| OD-01 | register | ready for architect disposition | Architect | none | Choice? | link |",
+        )
+        self.write(
+            "05_formal-review/input/UT-110/UT-110-formal-review-packet-round-02.md",
+            "# Formal Review Packet — UT-110\n\n"
+            "## Residual risks for the senior architect\n\n"
+            "| Risk | Source | Owner | Evidence | Due gate | Blocking |\n"
+            "|---|---|---|---|---|---|\n"
+            "| Data retention. | review | Legal | Policy sign-off | production entry | no |\n",
+        )
+        self.write(
+            "05_formal-review/output/UT-110/UT-110-formal-decision-round-02.md",
+            "# Formal Architecture Review Decision — UT-110 — Round 02\n\n"
+            "- **Review ID:** UT-110\n\n"
+            "## Decision\n\n`Approved`\n\n"
+            "### OD-01 — Sample decision\n\n"
+            "- **Selected option / disposition (human):** Option A selected\n"
+            "- **Reviewer rationale (human):** Sound.\n"
+            "- **Required concurrence and evidence (human):** none required\n"
+            "- **Blocking? (human):** no\n\n"
+            "## Residual risk dispositions\n\n"
+            "| Risk | Owner | Required evidence | Due gate | Blocking? | Human disposition |\n"
+            "|---|---|---|---|---|---|\n"
+            "| DATA RETENTION | Legal | Policy sign-off | production entry | no | Sign-off before production |\n\n"
+            "## Signature\n\n"
+            "- **Accountable reviewer (human actor):** A. Human\n"
+            "- **Role:** Senior Architect\n"
+            "- **Date signed (ISO 8601):** 2026-07-19\n",
+        )
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            review_state.preflight_decision("UT-110")
+        out = buffer.getvalue()
+        self.assertNotIn("absent from the decision's residual table", out)
+        self.assertIn("every cover residual risk", out)
+
+    def test_cover_cross_check_still_catches_real_wording_mismatch(self) -> None:
+        self._formal_setup(
+            "UT-111",
+            "| OD-01 | register | ready for architect disposition | Architect | none | Choice? | link |",
+        )
+        self.write(
+            "05_formal-review/input/UT-111/UT-111-formal-review-packet-round-02.md",
+            "# Formal Review Packet — UT-111\n\n"
+            "## Residual risks for the senior architect\n\n"
+            "| Risk | Source | Owner | Evidence | Due gate | Blocking |\n"
+            "|---|---|---|---|---|---|\n"
+            "| Transcript data is retained longer than policy allows without a purge job | review | Legal | Policy sign-off | production entry | no |\n",
+        )
+        self.write(
+            "05_formal-review/output/UT-111/UT-111-formal-decision-round-02.md",
+            "# Formal Architecture Review Decision — UT-111 — Round 02\n\n"
+            "- **Review ID:** UT-111\n\n"
+            "## Decision\n\n`Approved`\n\n"
+            "### OD-01 — Sample decision\n\n"
+            "- **Selected option / disposition (human):** Option A selected\n"
+            "- **Reviewer rationale (human):** Sound.\n"
+            "- **Required concurrence and evidence (human):** none required\n"
+            "- **Blocking? (human):** no\n\n"
+            "## Residual risk dispositions\n\n"
+            "| Risk | Owner | Required evidence | Due gate | Blocking? | Human disposition |\n"
+            "|---|---|---|---|---|---|\n"
+            "| Retention | Legal | Policy sign-off | production entry | no | Sign-off before production |\n\n"
+            "## Signature\n\n"
+            "- **Accountable reviewer (human actor):** A. Human\n"
+            "- **Role:** Senior Architect\n"
+            "- **Date signed (ISO 8601):** 2026-07-19\n",
+        )
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            review_state.preflight_decision("UT-111")
+        self.assertIn("absent from the decision's residual table", buffer.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main()

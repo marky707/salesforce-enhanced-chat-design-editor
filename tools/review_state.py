@@ -726,7 +726,15 @@ def check_residual_risks(
         result.passes.append(
             f"all {len(rows)} residual risk(s) are owned, evidenced, gated, and dispositioned consistently with the decision"
         )
-    cover_residual_cross_check(review_id, round_number, {cells[0].strip().lower() for cells in rows}, result)
+    cover_residual_cross_check(review_id, round_number, {normalize_risk_name(cells[0]) for cells in rows}, result)
+
+
+def normalize_risk_name(name: str) -> str:
+    """Fold incidental formatting (case, punctuation, whitespace) so a verbatim-copied
+    risk name matches even with trivial drift; real wording differences still miss."""
+    return re.sub(r"[^a-z0-9 ]", "", name.strip().lower()).strip()
+    # Deliberately not fuzzy beyond this: the fix for real mismatches is generation-side
+    # (copy verbatim from the cover), not looser matching that could hide a genuine gap.
 
 
 def cover_residual_cross_check(
@@ -748,12 +756,12 @@ def cover_residual_cross_check(
         cells = split_table_row(line) if line.strip().startswith("|") else []
         if cells and cells[0] and cells[0].lower() not in {"risk", "---"} and not set(cells[0]) <= {"-"}:
             cover_risks.append(cells[0].strip())
-    missing = [r for r in cover_risks if r.lower() not in decided]
+    missing = [r for r in cover_risks if normalize_risk_name(r) not in decided]
     if missing:
         result.warnings.append(
             "cover names residual risk(s) absent from the decision's residual table: "
             + ", ".join(f"'{r}'" for r in missing)
-            + " — confirm they were dispositioned or intentionally superseded"
+            + " — the FORM should copy risk names verbatim from the cover; confirm these were dispositioned or intentionally superseded"
         )
     elif cover_risks:
         result.passes.append(

@@ -59,6 +59,12 @@
 
 ## Residual risk dispositions
 
+<!-- GENERATED FORM: Risk, Owner, Required evidence, and Due gate are copied
+     verbatim from the packet cover's residual-risk table — same wording, one row
+     per cover row, none omitted or merged. If the cover lists zero residual
+     risks, say so here instead of leaving the table empty. Only Blocking? and
+     Human disposition are the reviewer's to fill. -->
+
 | Risk | Owner | Required evidence | Due gate | Blocking? | Human disposition |
 |---|---|---|---|---|---|
 | | | | architecture / build entry / UAT / production entry | yes/no | |
